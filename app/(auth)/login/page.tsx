@@ -23,7 +23,7 @@ const LoginPage = () => {
 
     return (
         <div className="w-full min-h-[400px] h-fit mt-6 flex justify-center">
-            <div className="w-[50vw] h-full px-10 py-4 rounded-[16px] border flex flex-col justify-center gap-4">
+            <div className="w-[50vw] h-full px-10 py-4 rounded-[16px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.05)] flex flex-col justify-center gap-4">
                 <h1 className="text-[24px] font-bold mb-4">Đăng nhập</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <BaseInput
@@ -49,7 +49,7 @@ const LoginPage = () => {
                 </form>
                 <div className="w-full text-center">
                     <span className="text-[16px] font-medium text-[#667085] " >Bạn chưa có tài khoản? </span>
-                    <Link href="/register" className="text-[16px] font-bold text-[#111111]">
+                    <Link href="/register"  className="text-[16px] font-bold text-[#111111] hover:underline transition-all duration-200">
                         Đăng ký ngay
                     </Link>
                 </div>

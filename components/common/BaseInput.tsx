@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 type BaseInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
@@ -6,15 +7,33 @@ type BaseInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const BaseInput = React.forwardRef<HTMLInputElement, BaseInputProps>(
-  ({ label, error, className = "", ...rest }, ref) => {
+  ({ label, error, className = "", type, ...rest }, ref) => {
+    const [showPassword, setShowPassword] = useState(false);
+    const isPassword = type === "password";
+
+    const toggleShowPassword = () => {
+      setShowPassword((prev) => !prev);
+    };
+
     return (
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 relative">
         {label && <label className="font-medium">{label}</label>}
-        <input
-          ref={ref}
-          className={`h-[48px] px-4 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-black transition-all ${className}`}
-          {...rest}
-        />
+        <div className="relative">
+          <input
+            ref={ref}
+            type={isPassword && showPassword ? "text" : type}
+            className={`h-[48px] w-full px-4 pr-10 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-black transition-all ${className}`}
+            {...rest}
+          />
+          {isPassword && (
+            <span
+              onClick={toggleShowPassword}
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+            >
+              {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+            </span>
+          )}
+        </div>
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
     );
