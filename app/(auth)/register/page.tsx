@@ -4,25 +4,36 @@ import BaseButton from "@/components/common/BaseButton";
 import BaseInput from "@/components/common/BaseInput";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-
-type RegisterFormInputs = {
-    username: string;
-    name: string,
-    email: string,
-    password: string;
-    confirmPassword: string;
-};
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterSchema, RegisterInput } from "@/schemas/user.schema";
+import { useRegister } from "@/hooks/useAuth";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
         watch,
-    } = useForm<RegisterFormInputs>();
+    } = useForm<RegisterInput>({
+        resolver: zodResolver(RegisterSchema),
+    });
 
-    const onSubmit = (data: RegisterFormInputs) => {
-        console.log("Register data:", data);
+    const { mutate, isPending } = useRegister();
+    const password = watch("password");
+    const router = useRouter()
+
+    const onSubmit = (data: RegisterInput) => {
+        mutate(data, {
+            onSuccess: () => {
+                toast.success("Đăng ký thành công")
+                router.push('/login')
+            },
+            onError: (error: any) => {
+                alert("Đăng ký thất bại: " + error?.message);
+            },
+        });
     };
 
     return (
@@ -35,21 +46,21 @@ const RegisterPage = () => {
                         id="name"
                         placeholder="Họ và tên"
                         error={errors.name?.message}
-                        {...register("name", { required: "Vui lòng nhập họ và tên" })}
+                        {...register("name")}
                     />
                     <BaseInput
                         label="Tên đăng nhập"
                         id="username"
                         placeholder="Tên đăng nhập"
                         error={errors.username?.message}
-                        {...register("username", { required: "Vui lòng nhập tên đăng nhập" })}
+                        {...register("username")}
                     />
                     <BaseInput
-                        label="email"
+                        label="Email"
                         id="email"
                         placeholder="Email"
                         error={errors.email?.message}
-                        {...register("email", { required: "Vui lòng nhập email" })}
+                        {...register("email")}
                     />
                     <BaseInput
                         label="Mật khẩu"
@@ -57,9 +68,8 @@ const RegisterPage = () => {
                         type="password"
                         placeholder="Mật khẩu"
                         error={errors.password?.message}
-                        {...register("password", { required: "Vui lòng nhập mật khẩu" })}
+                        {...register("password")}
                     />
-
                     <BaseInput
                         label="Xác nhận mật khẩu"
                         id="confirmPassword"
@@ -67,17 +77,13 @@ const RegisterPage = () => {
                         placeholder="Xác nhận mật khẩu"
                         error={
                             errors.confirmPassword?.message ||
-                            (watch("confirmPassword") !== watch("password") ? "Mật khẩu không khớp" : undefined)
+                            (watch("confirmPassword") !== password ? "Mật khẩu không khớp" : undefined)
                         }
-                        {...register("confirmPassword", {
-                            required: "Vui lòng xác nhận mật khẩu",
-                            validate: (val) =>
-                                val === watch("password") || "Mật khẩu không khớp",
-                        })}
+                        {...register("confirmPassword")}
                     />
 
-                    <BaseButton type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? "Đang xử lý..." : "Đăng ký"}
+                    <BaseButton type="submit" disabled={isPending}>
+                        {isPending ? "Đang xử lý..." : "Đăng ký"}
                     </BaseButton>
                 </form>
 
@@ -85,7 +91,10 @@ const RegisterPage = () => {
                     <span className="text-[16px] font-medium text-[#667085]">
                         Bạn đã có tài khoản?{" "}
                     </span>
-                    <Link href="/login" className="text-[16px] font-bold text-[#111111] hover:underline transition-all duration-200">
+                    <Link
+                        href="/login"
+                        className="text-[16px] font-bold text-[#111111] hover:underline transition-all duration-200"
+                    >
                         Đăng nhập
                     </Link>
                 </div>

@@ -1,22 +1,12 @@
-class AuthService {
-  private tokenKey = 'auth_token';
+import axios from "@/lib/axios";
+import { LoginInput, RegisterInput } from "@/schemas/user.schema";
 
-  login(username: string, password: string): boolean {
-    // Giả lập đăng nhập: nếu username và password đều là 'admin' thì thành công
-    if (username === 'admin' && password === 'admin') {
-      localStorage.setItem(this.tokenKey, 'dummy_token');
-      return true;
-    }
-    return false;
-  }
+export const registerUser = async (data: RegisterInput) => {
+  const response = await axios.post("/user/register", data);
+  return response.data;
+};
 
-  logout(): void {
-    localStorage.removeItem(this.tokenKey);
-  }
-
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
-  }
-}
-
-export default new AuthService();
+export const loginUser = async (data: LoginInput) => {
+  const response = await axios.post("/user/login", data);
+  return response.data;
+};

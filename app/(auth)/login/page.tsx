@@ -4,21 +4,31 @@ import BaseButton from "@/components/common/BaseButton";
 import BaseInput from "@/components/common/BaseInput";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { LoginInput } from "@/schemas/user.schema";
+import { useLogin } from "@/hooks/useAuth";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-type LoginFormInputs = {
-    username: string;
-    password: string;
-};
+
 
 const LoginPage = () => {
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<LoginFormInputs>();
-
-    const onSubmit = (data: LoginFormInputs) => {
-        console.log("Login data:", data);
+    } = useForm<LoginInput>();
+    const { mutate, isPending } = useLogin();
+    const router = useRouter()
+    const onSubmit = (data: LoginInput) => {
+        mutate(data, {
+            onSuccess: () => {
+                toast.success("Đăng nhập thành công")
+                router.push('/')
+            },
+            onError: (error: any) => {
+                alert("Đăng ký thất bại: " + error?.message);
+            },
+        });
     };
 
     return (
@@ -27,11 +37,11 @@ const LoginPage = () => {
                 <h1 className="text-[24px] font-bold mb-4">Đăng nhập</h1>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <BaseInput
-                        label="Tên đăng nhập"
-                        id="username"
-                        placeholder="Tên đăng nhập"
-                        error={errors.username?.message}
-                        {...register("username", { required: "Vui lòng nhập tên đăng nhập" })}
+                        label="Email"
+                        id="email"
+                        placeholder="Email"
+                        error={errors.email?.message}
+                        {...register("email", { required: "Vui lòng nhập email" })}
                     />
 
                     <BaseInput
@@ -49,7 +59,7 @@ const LoginPage = () => {
                 </form>
                 <div className="w-full text-center">
                     <span className="text-[16px] font-medium text-[#667085] " >Bạn chưa có tài khoản? </span>
-                    <Link href="/register"  className="text-[16px] font-bold text-[#111111] hover:underline transition-all duration-200">
+                    <Link href="/register" className="text-[16px] font-bold text-[#111111] hover:underline transition-all duration-200">
                         Đăng ký ngay
                     </Link>
                 </div>

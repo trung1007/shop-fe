@@ -1,21 +1,16 @@
-import { useState } from 'react';
-import AuthService from '../services/authService';
+import axios from "@/lib/axios";
+import { useMutation } from "@tanstack/react-query";
+import { LoginInput, RegisterInput } from "@/schemas/user.schema";
+import { loginUser, registerUser } from "@/services/authService";
 
-const useAuth = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(AuthService.isLoggedIn());
-
-  const login = (username: string, password: string) => {
-    const success = AuthService.login(username, password);
-    setIsLoggedIn(success);
-    return success;
-  };
-
-  const logout = () => {
-    AuthService.logout();
-    setIsLoggedIn(false);
-  };
-
-  return { isLoggedIn, login, logout };
+export const useRegister = () => {
+  return useMutation({
+    mutationFn: (data: RegisterInput) => registerUser(data),
+  });
 };
 
-export default useAuth;
+export const useLogin = () => {
+  return useMutation({
+    mutationFn: (data: LoginInput) => loginUser(data),
+  });
+};
