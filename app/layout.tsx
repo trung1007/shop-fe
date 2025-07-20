@@ -1,8 +1,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import "@/styles/global.css"
-import ReactQueryProvider from "@/context/react-query-provider";
-import { ToastContainer } from "react-toastify";
+import Providers from "@/providers";
 
 
 export default function RootLayout({
@@ -13,13 +12,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ReactQueryProvider >
+        <Providers >
           <Header />
           {children}
           <Footer />
-
-        </ReactQueryProvider>
-        <ToastContainer />
+        </Providers>
       </body>
     </html>
   );

@@ -1,12 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './auth/authSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./auth/authSlice";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    auth: authReducer, 
   },
 });
 
+/** Kiểu RootState & AppDispatch để dùng ở hook */
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export default store;
