@@ -17,16 +17,10 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: (data: LoginInput) => loginUser(data),
     onSuccess: (data) => {
-    
-      console.log("data:", data);
-      
 
-      console.log("data accessToken", data.accessToken);
       
       const { accessToken, user } = data;
-      console.log("access_token:", accessToken);
       
-
       Cookies.set("access_token", accessToken);
 
       dispatch(setUser({ user, accessToken }));

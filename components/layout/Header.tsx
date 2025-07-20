@@ -10,18 +10,20 @@ import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import SearchInput from "../ui/SearchInput";
 import MenuBar from "../ui/MenuBar";
+import Cookies from "js-cookie";
 const Header = () => {
 
     const router = useRouter();
 
     const handleClick = () => {
-        router.push("/login");
-        // if (!isLoggedIn) {
-        //     router.push("/login");
-        // } else {
-        //     // Đã đăng nhập: có thể mở dropdown, trang profile, v.v.
-        //     console.log("User is already logged in");
-        // }
+
+        const token = Cookies.get("access_token");
+        if (token) {
+            router.push("/user")
+        }
+        else {
+            router.push("/login");
+        }
     };
 
     const onLogoReload = () => {
