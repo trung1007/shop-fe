@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { loginUser, registerUser, updateUser } from "@/services/authService";
+import { getUser, loginUser, registerUser, updateUser } from "@/services/authService";
 import { LoginInput, RegisterInput, UpdateUserInput } from "@/schemas/user.schema";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -17,7 +17,6 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: (data: LoginInput) => loginUser(data),
     onSuccess: (data) => {
-      console.log("data:", data);
 
       const { accessToken, user } = data;
 
@@ -36,11 +35,13 @@ export const useUpdate = () => {
   const dispatch = useDispatch();
   return useMutation({
     mutationFn: (data: UpdateUserInput) => updateUser(data),
-    onSuccess: (updatedUser:User) => {
-      dispatch(setUser(updatedUser));
+    onSuccess: async (_res, variables: UpdateUserInput) => {
+      const newUser = await getUser(variables.id)
+      
+      dispatch(setUser(newUser))
     },
     onError: (error: any) => {
-      console.error("Cập nhật thất bại", error);
+      console.error("Cập nhật thất bại", error.message);
     },
   });
 };
