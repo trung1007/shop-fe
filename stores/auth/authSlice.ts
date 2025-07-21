@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
+  phone: string;
   // ... thêm nếu cần
 }
 
@@ -21,12 +22,12 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (
-      state,
-      action: PayloadAction<{ user: User; accessToken: string }>
-    ) => {
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+
+    setAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
     },
     logout: (state) => {
       state.user = null;
@@ -35,5 +36,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser, logout } = authSlice.actions;
+export const { setUser, setAccessToken, logout } = authSlice.actions;
 export default authSlice.reducer;

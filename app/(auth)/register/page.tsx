@@ -31,7 +31,7 @@ const RegisterPage = () => {
                 router.push('/login')
             },
             onError: (error: any) => {
-                alert("Đăng ký thất bại: " + error?.message);
+                toast.error("Đăng ký thất bại:", error?.message)
             },
         });
     };
@@ -61,6 +61,13 @@ const RegisterPage = () => {
                         placeholder="Email"
                         error={errors.email?.message}
                         {...register("email")}
+                    />
+                     <BaseInput
+                        label="Số điện thoại"
+                        id="phone"
+                        placeholder="Số điện thoại"
+                        error={errors.phone?.message}
+                        {...register("phone")}
                     />
                     <BaseInput
                         label="Mật khẩu"

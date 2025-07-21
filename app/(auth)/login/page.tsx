@@ -26,7 +26,8 @@ const LoginPage = () => {
                 router.push('/')
             },
             onError: (error: any) => {
-                alert("Đăng ký thất bại: " + error?.message);
+                // alert("Đăng ký thất bại: " + error?.message);
+                toast.error("Đăng nhập thất bại:", error?.message)
             },
         });
     };
