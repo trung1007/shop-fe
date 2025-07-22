@@ -124,11 +124,6 @@ const ChangePassPage = () => {
                                 </button>
                             </div>
                         </form>
-
-                        <h2 className="text-xl font-bold mt-10 mb-4">ĐỊA CHỈ GIAO HÀNG</h2>
-                        <button className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">
-                            Thêm địa chỉ mới
-                        </button>
                     </div>
                 )}
             </main>
