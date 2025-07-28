@@ -58,7 +58,12 @@ const LoginPage = () => {
                         {isSubmitting ? "Đang xử lý..." : "Đăng nhập"}
                     </BaseButton>
                 </form>
-                <div className="w-full text-center">
+                <div className="w-full text-right">
+                    <Link href="/forget-password" className="text-[12px] font-medium italic text-[#667085] hover:underline transition-all duration-200">
+                        Quên mật khẩu?
+                    </Link>
+                </div>
+                  <div className="w-full text-center">
                     <span className="text-[16px] font-medium text-[#667085] " >Bạn chưa có tài khoản? </span>
                     <Link href="/register" className="text-[16px] font-bold text-[#111111] hover:underline transition-all duration-200">
                         Đăng ký ngay
