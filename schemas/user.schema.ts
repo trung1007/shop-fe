@@ -28,6 +28,12 @@ export const UpdateSchema = z.object({
   name: z.string().min(1, "Họ tên không được để trống").optional(),
 });
 
+export const ResetPasswordSchema = z.object({
+  newPassword: z.string().min(6, "Mật khẩu tối thiểu 6 ký tự").optional(),
+  resetPasswordToken: z.string().optional()
+});
+
 export type RegisterInput = z.infer<typeof RegisterSchema>;
 export type LoginInput = z.infer<typeof LoginSchema>;
 export type UpdateUserInput = z.infer<typeof UpdateSchema>;
+export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>

@@ -5,8 +5,8 @@ import BaseInput from "@/components/common/BaseInput";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import { forgotPassword, resetPassword } from "@/services/authService";
 
 type ForgetPasswordInput = {
   email: string;
@@ -20,6 +20,7 @@ type ResetPasswordInput = {
 const ForgotPasswordPage = () => {
   const searchParams = useSearchParams();
   const resetPasswordToken = searchParams.get("token");
+
 
   const {
     register,
@@ -36,28 +37,20 @@ const ForgotPasswordPage = () => {
 
   const [sent, setSent] = useState(false);
 
-  useEffect(() => {
-    if (resetPasswordToken) {
-      console.log("Received reset password token:", resetPasswordToken);
-    }
-  }, [resetPasswordToken]);
 
   const onSubmit = async (data: ForgetPasswordInput) => {
     try {
-      const params = new URLSearchParams();
-      params.append("email", data.email);
-      await axios.post("http://localhost:8181/user/forgot-password", params, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
+      const payload = {
+        email: data.email
+      }
+      await forgotPassword(payload);
       setSent(true);
       toast.success("Đã gửi hướng dẫn đặt lại mật khẩu đến email của bạn");
     } catch (error: any) {
       console.error("Lỗi:", error?.response?.data?.message || error.message);
       toast.error(
         "Gửi yêu cầu thất bại: " +
-          (error?.response?.data?.message || "Đã xảy ra lỗi")
+        (error?.response?.data?.message || "Đã xảy ra lỗi")
       );
     }
   };
@@ -70,17 +63,17 @@ const ForgotPasswordPage = () => {
 
     try {
       const payload = {
-        resetPasswordToken: resetPasswordToken,
+        resetPasswordToken: resetPasswordToken || undefined,
         newPassword: data.password,
       };
 
-      await axios.post("http://localhost:8181/user/reset-password", payload);
+      await resetPassword(payload)
 
       toast.success("Đổi mật khẩu thành công!");
     } catch (error: any) {
       toast.error(
         "Đổi mật khẩu thất bại: " +
-          (error?.response?.data?.message || "Đã xảy ra lỗi")
+        (error?.response?.data?.message || "Đã xảy ra lỗi")
       );
     }
   };
@@ -91,7 +84,6 @@ const ForgotPasswordPage = () => {
         <h1 className="text-[24px] font-bold mb-4">
           {resetPasswordToken ? "Đặt lại mật khẩu" : "Quên mật khẩu"}
         </h1>
-
         {resetPasswordToken ? (
           <form
             onSubmit={handleSubmitReset(onResetPassword)}

@@ -2,6 +2,7 @@ import api from "@/lib/axios";
 import {
   LoginInput,
   RegisterInput,
+  ResetPasswordInput,
   UpdateUserInput,
 } from "@/schemas/user.schema";
 
@@ -22,5 +23,15 @@ export const updateUser = async (data: UpdateUserInput) => {
 
 export const getUser = async (id: number) => {
   const response = await api.get(`/user/${id}`);
+  return response.data;
+};
+
+export const forgotPassword = async (data: any) => {
+  const response = await api.post(`/user/forgot-password`, data);
+  return response.data;
+};
+
+export const resetPassword = async (data: ResetPasswordInput) => {
+  const response = await api.post(`/user/reset-password`, data);
   return response.data;
 };
