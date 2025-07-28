@@ -70,7 +70,7 @@ const ForgotPasswordPage = () => {
 
     try {
       const payload = {
-        token: resetPasswordToken,
+        resetPasswordToken: resetPasswordToken,
         newPassword: data.password,
       };
 
