@@ -1,7 +1,8 @@
 "use client";
 
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, DownOutlined } from "@ant-design/icons";
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 
 const SearchInput = ({ onSearch }: { onSearch: (value: string) => void }) => {
   const { control, handleSubmit, reset } = useForm({
@@ -10,13 +11,24 @@ const SearchInput = ({ onSearch }: { onSearch: (value: string) => void }) => {
     },
   });
 
+  const [selectedCategory, setSelectedCategory] = useState("Danh mục sản phẩm");
+
   const onSubmit = (data: { search: string }) => {
     onSearch(data.search);
     reset();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="relative w-full max-w-[300px]">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex items-center w-full h-[44px] border border-gray-300 rounded-full overflow-hidden"
+    >
+      <div className="flex items-center px-4 border-r border-gray-300 cursor-pointer whitespace-nowrap text-sm text-gray-700 hover:bg-gray-100 h-full">
+        {selectedCategory}
+        <DownOutlined className="ml-1 text-xs" />
+      </div>
+
+      {/* Input tìm kiếm */}
       <Controller
         name="search"
         control={control}
@@ -24,19 +36,18 @@ const SearchInput = ({ onSearch }: { onSearch: (value: string) => void }) => {
           <input
             {...field}
             type="text"
-            placeholder="Tìm kiếm..."
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSubmit(onSubmit)();
-              }
-            }}
-            className="w-full h-[40px] pl-10 pr-3 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-black"
+            placeholder="Tìm theo tên sản phẩm..."
+            className="flex-1 px-4 text-sm outline-none h-full"
           />
         )}
       />
-      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+
+      <button
+        type="submit"
+        className="w-[60px] h-full bg-[#ee1926] flex items-center justify-center text-white hover:bg-[#ff1a1a] transition"
+      >
         <SearchOutlined />
-      </span>
+      </button>
     </form>
   );
 };
