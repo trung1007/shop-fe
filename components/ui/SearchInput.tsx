@@ -4,17 +4,31 @@ import { SearchOutlined, DownOutlined } from "@ant-design/icons";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 
+type FormValues = {
+  search: string;
+  category: string;
+};
+const categories = [
+  "Danh mục sản phẩm",
+  "Bàn phím cơ",
+  "Chuột & lót chuột",
+  "Tai nghe",
+];
+
 const SearchInput = ({ onSearch }: { onSearch: (value: string) => void }) => {
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
       search: "",
+      category: categories[0], // default là "Danh mục sản phẩm"
     },
   });
 
   const [selectedCategory, setSelectedCategory] = useState("Danh mục sản phẩm");
 
-  const onSubmit = (data: { search: string }) => {
-    onSearch(data.search);
+  const onSubmit = (data: FormValues) => {
+    console.log("Search:", data.search);
+    console.log("Category:", data.category);
+    // onSearch(data.search, data.category);
     reset();
   };
 
@@ -23,12 +37,24 @@ const SearchInput = ({ onSearch }: { onSearch: (value: string) => void }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex items-center w-full h-[44px] border border-gray-300 rounded-full overflow-hidden"
     >
-      <div className="flex items-center px-4 border-r border-gray-300 cursor-pointer whitespace-nowrap text-sm text-gray-700 hover:bg-gray-100 h-full">
-        {selectedCategory}
-        <DownOutlined className="ml-1 text-xs" />
-      </div>
-
-      {/* Input tìm kiếm */}
+      <Controller
+        name="category"
+        control={control}
+        render={({ field }) => (
+          <div className="flex items-center px-4 border-r border-gray-300 h-full">
+            <select
+              {...field}
+              className="bg-transparent outline-none cursor-pointer text-sm text-gray-700 h-full"
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      />
       <Controller
         name="search"
         control={control}
