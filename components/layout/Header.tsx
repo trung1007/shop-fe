@@ -51,14 +51,13 @@ const Header = () => {
 
       <header
         ref={headerRef}
-        className={`header-wrapper py-4 w-full flex flex-col transition-all duration-200 ease-in-out ${
-          isSticky
-            ? "fixed top-0 left-0 z-50 bg-white shadow-md"
-            : "relative bg-transparent"
-        }`}
+        className={`header-wrapper  w-full h-fit flex flex-col transition-all duration-200 ease-in-out ${isSticky
+          ? "fixed top-0 left-0 z-50 bg-white shadow-md"
+          : "relative bg-transparent"
+          }`}
       >
-        <div className="header-container h-[48px] w-full px-[64px] grid grid-cols-[3fr_6fr_3fr] items-center">
-          <div className="header-logo flex justify-center items-center">
+        <div className="header-container py-4 h-fit min-h-[48px] w-full px-[64px] grid grid-cols-[3fr_6fr_3fr] items-center">
+          <div className="header-logo flex justify-start items-center">
             <img
               src="https://bizweb.dktcdn.net/100/502/483/themes/1011801/assets/logo.png?1748850004905"
               alt="Logo T&D"
@@ -67,8 +66,9 @@ const Header = () => {
               onClick={onLogoReload}
               className="cursor-pointer"
             />
+
           </div>
-          <SearchInput onSearch={(val) => {}} />
+          <SearchInput onSearch={(val) => { }} />
 
           <div className="header-func min-w-[20%] h-8 flex gap-3 justify-end items-center">
             {user ? (
@@ -76,7 +76,7 @@ const Header = () => {
                 className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer"
                 onClick={handleClick}
               >
-                 <div className="p-2 rounded-[8px] border border-gray-300 ">
+                <div className="p-2 rounded-[8px] border border-gray-300 ">
                   <FaRegUserCircle size={20} />
                 </div>
                 <span className="font-medium text-[16px] block">{user?.name}</span>
@@ -108,7 +108,7 @@ const Header = () => {
           </div>
         </div>
 
-        <MenuBar />
+        {/* <MenuBar /> */}
       </header>
     </>
   );

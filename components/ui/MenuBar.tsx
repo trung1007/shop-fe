@@ -56,7 +56,7 @@ const MenuBar = () => {
         router.push(route);
     };
     return (
-        <nav className="w-full h-[36px] px-[32px] flex items-center justify-center border-b-1 border-b-gray-300">
+        <nav className="w-full h-[48px] px-[32px] flex items-center justify-center bg-[#ed1927]">
             <ul className="flex h-full items-center gap-6">
                 {MenuItem.map((item) => (
                     <li
