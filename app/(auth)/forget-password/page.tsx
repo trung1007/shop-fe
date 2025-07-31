@@ -236,16 +236,19 @@ const ForgotPasswordPage = () => {
         )}
 
         {!resetPasswordToken && (
-          <div className="text-center mt-6">
-            <span className="text-gray-500 text-sm">Hoặc đăng nhập bằng</span>
-            <div className="flex justify-center gap-4 mt-3">
-              <button className="bg-[#3b5998] text-white px-4 py-2 rounded text-sm">
-                Facebook
-              </button>
-              <button className="bg-[#db4437] text-white px-4 py-2 rounded text-sm">
-                Google
-              </button>
-            </div>
+          <div className="flex justify-center gap-4">
+            <button className="flex items-center gap-2 bg-[#3b5998] text-white px-4  rounded  ">
+              <div className="flex items-center justify-center ">
+                <span className="text-lg border-r px-2">f</span>
+              </div>
+              Facebook
+            </button>
+            <button className="flex items-center gap-2 bg-[#db4437] text-white px-4 py-2 rounded">
+              <div className="flex items-center justify-center ">
+                <span className="text-lg border-r px-2">G+</span>
+              </div>
+              Google
+            </button>
           </div>
         )}
       </div>

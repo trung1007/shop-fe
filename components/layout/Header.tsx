@@ -11,6 +11,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import SearchInput from "../ui/SearchInput";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/hooks/reduxHooks";
+import MenuBar from "../ui/MenuBar";
 // import MenuBar from "../ui/MenuBar";
 
 const Header = () => {
@@ -107,7 +108,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* <MenuBar /> */}
+        <MenuBar />
       </header>
     </>
   );
