@@ -9,12 +9,15 @@ import { FaInstagram } from "react-icons/fa6";
 import { FaGithub, FaRegUserCircle, FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import SearchInput from "../ui/SearchInput";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/hooks/reduxHooks";
 // import MenuBar from "../ui/MenuBar";
 
 const Header = () => {
   const router = useRouter();
   const headerRef = useRef<HTMLDivElement>(null); // Ref
   const [isSticky, setIsSticky] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,6 +37,10 @@ const Header = () => {
     const token = Cookies.get("access_token");
     token ? router.push("/user") : router.push("/login");
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   const onLogoReload = () => router.push("/");
 
@@ -63,15 +70,31 @@ const Header = () => {
           <SearchInput onSearch={(val) => {}} />
 
           <div className="header-func min-w-[20%] h-8 flex gap-3 justify-end items-center">
-            <div className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={handleClick}>
-              <div className="p-2 rounded-[8px] border border-gray-300 ">
-                <FaRegUserCircle size={20}  />
+            {user ? (
+              <div
+                className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer"
+                onClick={handleClick}
+              >
+                 <div className="p-2 rounded-[8px] border border-gray-300 ">
+                  <FaRegUserCircle size={20} />
+                </div>
+                <span className="font-medium text-[16px] block">{user?.name}</span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-xs">Tài khoản</span>
-                <span className="font-semibold block">Đăng nhập</span>
+            ) : (
+              <div
+                className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer"
+                onClick={handleClick}
+              >
+                <div className="p-2 rounded-[8px] border border-gray-300 ">
+                  <FaRegUserCircle size={20} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs">Tài khoản</span>
+                  <span className="font-semibold block">Đăng nhập</span>
+                </div>
               </div>
-            </div>
+            )}
+
             <div className="cart flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer">
               <div className="p-2 rounded-[8px] border border-gray-300 ">
                 <FiShoppingCart size={20} />

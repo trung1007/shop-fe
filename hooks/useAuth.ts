@@ -22,8 +22,9 @@ export const useLogin = () => {
 
       Cookies.set("access_token", accessToken);
 
-      dispatch(setUser(user));
       dispatch(setAccessToken(accessToken));
+      dispatch(setUser(user));
+
     },
     onError: (error: any) => {
       console.error("Đăng nhập thất bại", error);
