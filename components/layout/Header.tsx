@@ -43,7 +43,7 @@ const Header = () => {
 
       <header
         ref={headerRef}
-        className={`header-wrapper py-4 w-full flex flex-col transition-all duration-500 ease-in-out ${
+        className={`header-wrapper py-4 w-full flex flex-col transition-all duration-200 ease-in-out ${
           isSticky
             ? "fixed top-0 left-0 z-50 bg-white shadow-md"
             : "relative bg-transparent"
@@ -63,9 +63,9 @@ const Header = () => {
           <SearchInput onSearch={(val) => {}} />
 
           <div className="header-func min-w-[20%] h-8 flex gap-3 justify-end items-center">
-            <div className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer">
+            <div className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={handleClick}>
               <div className="p-2 rounded-[8px] border border-gray-300 ">
-                <FaRegUserCircle size={20} onClick={handleClick} />
+                <FaRegUserCircle size={20}  />
               </div>
               <div className="flex flex-col">
                 <span className="text-xs">Tài khoản</span>
