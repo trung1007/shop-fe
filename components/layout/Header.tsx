@@ -39,10 +39,6 @@ const Header = () => {
     token ? router.push("/user") : router.push("/login");
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const onLogoReload = () => router.push("/");
 
   return (

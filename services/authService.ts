@@ -12,7 +12,7 @@ export const registerUser = async (data: RegisterInput) => {
 };
 
 export const loginUser = async (data: LoginInput) => {
-  const response = await api.post("/user/login", data);
+  const response = await api.post("/auth/login", data);
   return response.data;
 };
 
@@ -26,8 +26,12 @@ export const getUser = async (id: number) => {
   return response.data;
 };
 
-export const forgotPassword = async (data: any) => {
-  const response = await api.post(`/user/forgot-password`, data);
+export const forgotPassword = async (email: string) => {
+  const response = await api.post(`/user/forgot-password`, null,{
+    params: {
+      email,
+    },
+  });
   return response.data;
 };
 

@@ -39,9 +39,7 @@ const ForgotPasswordPage = () => {
 
   const onSubmit = async (data: ForgetPasswordInput) => {
     try {
-      const payload = {
-        email: data.email,
-      };
+      const payload = data.email;
       await forgotPassword(payload);
       setSent(true);
       toast.success("Đã gửi hướng dẫn đặt lại mật khẩu đến email của bạn");
