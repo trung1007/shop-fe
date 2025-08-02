@@ -42,15 +42,11 @@ const RegisterPage = () => {
           Đăng ký tài khoản
         </h1>
         <p className="text-center text-sm text-[#666] mb-4">
-          Bạn đã có tài khoản ?{" "}
+          Bạn đã có tài khoản?{" "}
           <Link href="/login" className="underline font-medium">
             Đăng nhập tại đây
           </Link>
         </p>
-
-        <h2 className="text-sm font-bold mb-2 text-center">
-          Thông tin cá nhân
-        </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <BaseInput
@@ -61,39 +57,55 @@ const RegisterPage = () => {
             error={errors.name?.message}
             {...register("name")}
           />
+
+          <BaseInput
+            label="Tên đăng nhập"
+            id="username"
+            placeholder="Tên đăng nhập"
+            error={errors.username?.message}
+            {...register("username")}
+          />
+
           <BaseInput
             label="Số điện thoại"
             id="phone"
-            required
             placeholder="Số điện thoại"
             error={errors.phone?.message}
-            {...register("phone", { required: "Vui lòng nhập số điện thoại" })}
+            {...register("phone")}
           />
+
           <BaseInput
             label="Email"
             id="email"
-            required
             placeholder="Email"
+            required
             error={errors.email?.message}
-            {...register("email", { required: "Vui lòng nhập email" })}
+            {...register("email")}
           />
+
           <BaseInput
             label="Mật khẩu"
             id="password"
-            required
             type="password"
             placeholder="Mật khẩu"
+            required
             error={errors.password?.message}
-            {...register("password", { required: "Vui lòng nhập mật khẩu" })}
+            {...register("password")}
           />
 
-          <button
-            type="submit"
-            disabled={isPending}
-            className="bg-[#e60000] text-white font-bold py-3 rounded-full hover:bg-[#cc0000] transition-all"
-          >
+          <BaseInput
+            label="Xác nhận mật khẩu"
+            id="confirmPassword"
+            type="password"
+            placeholder="Xác nhận mật khẩu"
+            required
+            error={errors.confirmPassword?.message}
+            {...register("confirmPassword")}
+          />
+
+          <BaseButton type="submit" disabled={isPending}>
             {isPending ? "Đang xử lý..." : "Đăng ký"}
-          </button>
+          </BaseButton>
         </form>
 
         <div className="text-center my-4 text-[#444] text-sm">
@@ -101,14 +113,14 @@ const RegisterPage = () => {
         </div>
 
         <div className="flex justify-center gap-4">
-          <button className="flex items-center gap-2 bg-[#3b5998] text-white px-4  rounded  ">
-            <div className="flex items-center justify-center ">
+          <button className="flex items-center gap-2 bg-[#3b5998] text-white px-4 rounded">
+            <div className="flex items-center justify-center">
               <span className="text-lg border-r px-2">f</span>
             </div>
             Facebook
           </button>
           <button className="flex items-center gap-2 bg-[#db4437] text-white px-4 py-2 rounded">
-            <div className="flex items-center justify-center ">
+            <div className="flex items-center justify-center">
               <span className="text-lg border-r px-2">G+</span>
             </div>
             Google

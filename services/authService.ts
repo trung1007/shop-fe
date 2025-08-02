@@ -7,6 +7,8 @@ import {
 } from "@/schemas/user.schema";
 
 export const registerUser = async (data: RegisterInput) => {
+  console.log(data);
+  
   const response = await api.post("/user/register", data);
   return response.data;
 };

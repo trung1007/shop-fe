@@ -11,11 +11,13 @@ export interface User {
 interface AuthState {
   user: User | null;
   accessToken: string | null;
+  refreshToken: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
   accessToken: null,
+  refreshToken: null,
 };
 
 const authSlice = createSlice({
@@ -29,12 +31,16 @@ const authSlice = createSlice({
     setAccessToken: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
     },
+    setRefreshToken: (state, action: PayloadAction<string>) => {
+      state.refreshToken = action.payload;
+    },
     logout: (state) => {
       state.accessToken = null;
+      state.refreshToken = null;
       state.user = null;
     },
   },
 });
 
-export const { setUser, setAccessToken, logout } = authSlice.actions;
+export const { setUser, setAccessToken, setRefreshToken, logout } = authSlice.actions;
 export default authSlice.reducer;
