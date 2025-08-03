@@ -49,7 +49,7 @@ const AdminPage = () => {
     if (!validate()) return;
 
     try {
-      await axios.post("http://localhost:8081/api/categories", formData);
+      await axios.post("http://localhost:8181/category/save", formData);
       alert("Tạo category thành công!");
       setFormData({
         name: "",
