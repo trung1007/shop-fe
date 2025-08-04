@@ -16,7 +16,7 @@ import MenuBar from "../ui/MenuBar";
 
 const Header = () => {
   const router = useRouter();
-  const headerRef = useRef<HTMLDivElement>(null); // Ref
+  const headerRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
 
@@ -39,11 +39,12 @@ const Header = () => {
     token ? router.push("/user") : router.push("/login");
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   const onLogoReload = () => router.push("/");
+  
+  useEffect(()=>{
+    console.log(user);
+    
+  },[user])
 
   return (
     <>

@@ -4,7 +4,7 @@ import laptopImg from "@/public/images/laptop.webp"
 const ListCollection = () => {
   const fakeData = Array.from({ length: 16 }).map((_, index) => ({
     srcImgCollection: {
-      src: laptopImg.src, // ảnh nội bộ từ thư mục public
+      src: "https://firebasestorage.googleapis.com/v0/b/music-app-2c0fc.appspot.com/o/T%26D-Shop%2Fcategory%2Fban-phim-e-dra-ek398.jpg?alt=media&token=13ed4008-f2d8-44c4-a599-dc5270b990e8", 
     },
     collectionType: `Collection ${index + 1}`,
   }));
