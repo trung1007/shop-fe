@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import BaseInput from "@/components/common/BaseInput";
 import BaseButton from "@/components/common/BaseButton";
+import api from "@/lib/axios";
 
 const AdminPage = () => {
   const [formData, setFormData] = useState({
@@ -49,7 +50,7 @@ const AdminPage = () => {
     if (!validate()) return;
 
     try {
-      await axios.post("http://localhost:8181/category/save", formData);
+      await api.post("http://localhost:8181/category/save", formData);
       alert("Tạo category thành công!");
       setFormData({
         name: "",

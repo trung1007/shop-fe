@@ -16,7 +16,7 @@ import MenuBar from "../ui/MenuBar";
 
 const Header = () => {
   const router = useRouter();
-  const headerRef = useRef<HTMLDivElement>(null); // Ref
+  const headerRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
 

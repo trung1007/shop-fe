@@ -40,6 +40,8 @@ export const useLogin = () => {
 
       dispatch(setAccessToken(token?.accessToken));
       dispatch(setRefreshToken(token?.refreshToken));
+      console.log("User:", user);
+      
 
       dispatch(setUser(user));
     },
