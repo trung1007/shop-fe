@@ -25,31 +25,27 @@ export const useRegister = () => {
   });
 };
 
-export const useLogin = () => {
+export const useAuthMutation = (
+  mutationFn: (data: any) => Promise<any>
+) =>  {
   const dispatch = useDispatch();
-
   return useMutation({
-    mutationFn: (data: LoginInput) => loginUser(data),
+    mutationFn,
     onSuccess: (data) => {
       const { token, user } = data;
-      console.log("data:", data);
-      
-      Cookies.set("access_token", token?.accessToken);
 
+      Cookies.set("access_token", token?.accessToken);
       Cookies.set("refresh_token", token?.refreshToken);
 
       dispatch(setAccessToken(token?.accessToken));
       dispatch(setRefreshToken(token?.refreshToken));
-      console.log("User:", user);
-      
-
       dispatch(setUser(user));
     },
     onError: (error: any) => {
       console.error("Đăng nhập thất bại", error);
     },
   });
-};
+}
 
 export const useUpdate = () => {
   const dispatch = useDispatch();
