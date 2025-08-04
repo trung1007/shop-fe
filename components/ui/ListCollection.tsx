@@ -1,21 +1,31 @@
+"use client";
+import { useEffect, useState } from "react";
 import CollectionCard from "./CollectionCard";
-import laptopImg from "@/public/images/laptop.webp"
+import { getListCategories } from "@/services/productService";
 
 const ListCollection = () => {
-  const fakeData = Array.from({ length: 16 }).map((_, index) => ({
-    srcImgCollection: {
-      src: "https://firebasestorage.googleapis.com/v0/b/music-app-2c0fc.appspot.com/o/T%26D-Shop%2Fcategory%2Fban-phim-e-dra-ek398.jpg?alt=media&token=13ed4008-f2d8-44c4-a599-dc5270b990e8", 
-    },
-    collectionType: `Collection ${index + 1}`,
-  }));
+  const [categories, setCategories] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getListCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+ 
   return (
-    <div className="grid grid-cols-8 grid-rows-2 w-full h-[360px] ">
-      {fakeData.map((item, index) => (
+    <div className="grid grid-cols-4 divide-x divide-gray-300 border border-gray-300 ">
+      {categories.map((item, index) => (
         <CollectionCard
           key={index}
-          srcImgCollection={item.srcImgCollection}
-          collectionType={item.collectionType}
+          img={item?.img}
+          code={item?.code}
         />
       ))}
     </div>
