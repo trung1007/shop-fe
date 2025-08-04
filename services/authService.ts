@@ -7,8 +7,6 @@ import {
 } from "@/schemas/user.schema";
 
 export const registerUser = async (data: RegisterInput) => {
-  console.log(data);
-  
   const response = await api.post("/user/register", data);
   return response.data;
 };
@@ -17,6 +15,23 @@ export const loginUser = async (data: LoginInput) => {
   const response = await api.post("/auth/login", data);
   return response.data;
 };
+
+export const loginGoogle = async (token: string) => {
+  const response = await api.post("/auth/google", token, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  });
+  return response.data;
+}
+
+export const logout = async (refreshToken: string) => {
+  const response = await api.post("/auth/logout", refreshToken, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  });
+  return response.data;}
 
 export const updateUser = async (data: UpdateUserInput) => {
   const response = await api.put("/user/update", data);
@@ -29,7 +44,7 @@ export const getUser = async (id: number) => {
 };
 
 export const forgotPassword = async (email: string) => {
-  const response = await api.post(`/user/forgot-password`, null,{
+  const response = await api.post(`/user/forgot-password`, null, {
     params: {
       email,
     },
