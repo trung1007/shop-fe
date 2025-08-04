@@ -19,9 +19,14 @@ const LoginPage = () => {
   const router = useRouter();
   const onSubmit = (data: LoginInput) => {
     mutate(data, {
-      onSuccess: () => {
-        toast.success("Đăng nhập thành công");
-        router.push("/");
+      onSuccess: (res) => {
+        console.log("Response", res);
+        if (res?.user?.roles?.some((role: any) => role.name === "ROLE_ADMIN")) {
+          router.push("/admin");
+          return;
+        } else {
+          router.push("/");
+        }
       },
       onError: (error: any) => {
         const errorMessage =
@@ -90,19 +95,15 @@ const LoginPage = () => {
         <div className="flex justify-center gap-4">
           <button className="flex items-center gap-2 bg-[#3b5998] text-white px-4  rounded  ">
             <div className="flex items-center justify-center ">
-              <span className="text-lg border-r px-2">
-                f
-              </span>
+              <span className="text-lg border-r px-2">f</span>
             </div>
             Facebook
           </button>
           <button className="flex items-center gap-2 bg-[#db4437] text-white px-4 py-2 rounded">
             <div className="flex items-center justify-center ">
-              <span className="text-lg border-r px-2">
-                G+
-              </span>
+              <span className="text-lg border-r px-2">G+</span>
             </div>
-           Google
+            Google
           </button>
         </div>
       </div>
