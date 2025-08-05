@@ -15,6 +15,7 @@ export interface ProductFormData {
     description: string;
     price: number;
     quantity: number;
+    type:string;
     image: string;
 }
 

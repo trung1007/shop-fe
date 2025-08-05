@@ -2,39 +2,45 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Button } from "antd";
-import AddProductModal, { ProductFormData } from "@/components/ui/AddProductModal"; 
+import { Button, Pagination } from "antd";
+import AddProductModal, { ProductFormData } from "@/components/ui/AddProductModal";
 
-const mockProducts = [
-    {
-        id: 1,
-        name: "Laptop ASUS ROG",
-        image: "https://via.placeholder.com/80x80.png?text=ASUS",
-        price: 25000000,
-        quantity: 12,
-    },
-    {
-        id: 2,
-        name: "iPhone 15 Pro Max",
-        image: "https://via.placeholder.com/80x80.png?text=iPhone",
-        price: 33990000,
-        quantity: 8,
-    },
-    {
-        id: 3,
-        name: "Tai nghe Sony WH-1000XM5",
-        image: "https://via.placeholder.com/80x80.png?text=Sony",
-        price: 6990000,
-        quantity: 20,
-    },
-];
+// Fake 30 sản phẩm
+const generateMockProducts = () => {
+    const types = ["laptop", "phone", "headphone"];
+    const names = ["ASUS ROG", "iPhone", "Sony", "Samsung", "Dell", "HP", "JBL"];
+    return Array.from({ length: 30 }, (_, i) => ({
+        id: i + 1,
+        name: `${names[i % names.length]} #${i + 1}`,
+        image: `https://via.placeholder.com/80x80.png?text=${encodeURIComponent(
+            names[i % names.length]
+        )}`,
+        price: 1000000 + (i % 10) * 1000000,
+        quantity: Math.floor(Math.random() * 20) + 1,
+        type: types[i % types.length],
+    }));
+};
 
 const AdminProductPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [products, setProducts] = useState(generateMockProducts());
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const pageSize = 10;
+    const currentProducts = products.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+    );
 
     const handleAddProduct = (data: ProductFormData) => {
-        console.log("Sản phẩm mới:", data);
-        // TODO: Gửi data lên server, hoặc thêm vào state sản phẩm
+        const newProduct = {
+            ...data,
+            id: products.length + 1,
+            image:
+                data.image ||
+                `https://via.placeholder.com/80x80.png?text=${encodeURIComponent(data.name)}`,
+        };
+        setProducts([newProduct, ...products]);
         setIsModalOpen(false);
     };
 
@@ -55,14 +61,17 @@ const AdminProductPage = () => {
                             <th className="px-4 py-3 text-left">Hình ảnh</th>
                             <th className="px-4 py-3 text-left">Tên sản phẩm</th>
                             <th className="px-4 py-3 text-left">Giá</th>
+                            <th className="px-4 py-3 text-left">Phân loại</th>
                             <th className="px-4 py-3 text-left">Số lượng</th>
                             <th className="px-4 py-3 text-left">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {mockProducts.map((product, index) => (
+                        {currentProducts.map((product, index) => (
                             <tr key={product.id} className="border-t">
-                                <td className="px-4 py-3">{index + 1}</td>
+                                <td className="px-4 py-3">
+                                    {(currentPage - 1) * pageSize + index + 1}
+                                </td>
                                 <td className="px-4 py-3">
                                     <Image
                                         src={product.image}
@@ -76,6 +85,7 @@ const AdminProductPage = () => {
                                 <td className="px-4 py-3">
                                     {product.price.toLocaleString()}₫
                                 </td>
+                                <td className="px-4 py-3">{product.type}</td>
                                 <td className="px-4 py-3">{product.quantity}</td>
                                 <td className="px-4 py-3 space-x-2">
                                     <button className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
@@ -89,6 +99,16 @@ const AdminProductPage = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={products.length}
+                    onChange={(page) => setCurrentPage(page)}
+                    showSizeChanger={false}
+                />
             </div>
 
             <AddProductModal
