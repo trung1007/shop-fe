@@ -11,7 +11,6 @@ const RedirectByRole = () => {
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    // Nếu roles chưa load xong, thì chờ
     if (!roles) return;
 
     const hasAdminRole = roles.some((role: any) => role.name === "ROLE_ADMIN");
@@ -20,17 +19,9 @@ const RedirectByRole = () => {
       router.replace("/admin");
       return;
     } else {
-      setIsChecking(false); // Không phải admin thì thôi, render UI thường
+      setIsChecking(false);
     }
   }, [roles, router]);
-
-//   if (isChecking) {
-//     return (
-//       <div className="w-screen h-screen flex justify-center items-center">
-//         <p>Đang kiểm tra quyền truy cập...</p>
-//       </div>
-//     );
-//   }
 
   return null;
 };

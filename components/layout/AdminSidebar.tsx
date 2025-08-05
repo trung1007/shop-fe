@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaTachometerAlt, FaUsers, FaCog } from "react-icons/fa";
+import { FaTachometerAlt, FaUsers, FaCog, FaShoppingCart } from "react-icons/fa";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -14,6 +14,7 @@ const AdminSideBar = ({ isOpen }: SidebarProps) => {
   const menuItems = [
     { name: "Dashboard", path: "/admin", icon: <FaTachometerAlt /> },
     { name: "Users", path: "/admin/users", icon: <FaUsers /> },
+    { name: "Danh sách sản phẩm", path: "/admin/products", icon: <FaShoppingCart /> },
     { name: "Settings", path: "/admin/settings", icon: <FaCog /> },
   ];
 

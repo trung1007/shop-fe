@@ -18,6 +18,14 @@ export const loginUser = async (data: LoginInput) => {
   return response.data;
 };
 
+export const logout = async (refreshToken: string) => {
+  const response = await api.post("/auth/logout", refreshToken, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  });
+  return response.data;}
+
 export const updateUser = async (data: UpdateUserInput) => {
   const response = await api.put("/user/update", data);
   return response.data;

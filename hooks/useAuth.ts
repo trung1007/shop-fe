@@ -32,16 +32,10 @@ export const useLogin = () => {
     mutationFn: (data: LoginInput) => loginUser(data),
     onSuccess: (data) => {
       const { token, user } = data;
-      console.log("data:", data);
-      
       Cookies.set("access_token", token?.accessToken);
-
       Cookies.set("refresh_token", token?.refreshToken);
-
       dispatch(setAccessToken(token?.accessToken));
       dispatch(setRefreshToken(token?.refreshToken));
-      console.log("User:", user);
-      
 
       dispatch(setUser(user));
     },
@@ -65,3 +59,4 @@ export const useUpdate = () => {
     },
   });
 };
+
