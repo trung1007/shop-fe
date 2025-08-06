@@ -79,8 +79,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      console.log("Submitting product data:", payload);
-
       await addProduct(payload);
       onSuccess?.();
       reset();
