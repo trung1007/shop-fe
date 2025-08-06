@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { addProduct } from "@/services/productService";
+import { addProduct, getListCategories } from "@/services/productService";
 import { ProductInput, ProductSchema } from "@/schemas/product.schema";
 import BaseInput from "@/components/common/BaseInput";
 import BaseDropdown from "../common/BaseDropdown";
@@ -14,6 +14,11 @@ interface AddProductModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+}
+
+interface Category {
+  id: number;
+  name: string;
 }
 
 const AddProductModal: React.FC<AddProductModalProps> = ({
@@ -40,6 +45,27 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const [categoryOptions, setCategoryOptions] = useState<
+    { label: string; value: number }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getListCategories();
+        const mapped = data.map((cat: any) => ({
+          label: cat.name,
+          value: cat.id,
+        }));
+        setCategoryOptions(mapped);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const watchedPrice = watch("price");
   const watchedQuantity = watch("quantity");
 
@@ -55,7 +81,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       };
       console.log("Submitting product data:", payload);
 
-      //   await addProduct(payload);
+      await addProduct(payload);
       onSuccess?.();
       reset();
       Promise.resolve().then(() => {
@@ -169,11 +195,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               onChange={(e) => field.onChange(Number(e.target.value))}
               error={errors.categoryId?.message}
               value={field.value ?? ""}
-              options={[
-                { label: "Laptop", value: 1 },
-                { label: "Điện thoại", value: 2 },
-                { label: "Phụ kiện", value: 3 },
-              ]}
+              options={categoryOptions}
               isOpen={dropdownOpen}
               setIsOpen={setDropdownOpen}
             />
