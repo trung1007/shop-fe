@@ -9,6 +9,7 @@ import { addProduct, getListCategories } from "@/services/productService";
 import { ProductInput, ProductSchema } from "@/schemas/product.schema";
 import BaseInput from "@/components/common/BaseInput";
 import BaseDropdown from "../common/BaseDropdown";
+import BaseUpload from "../common/BaseUpload";
 
 interface AddProductModalProps {
   open: boolean;
@@ -31,13 +32,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<ProductInput>({
     defaultValues: {
       name: "",
       price: 0,
       quantity: 0,
-      image: "",
+      image: null,
       description: "",
     },
     resolver: zodResolver(ProductSchema),
@@ -79,7 +81,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      await addProduct(payload);
+      console.log("Submitting product data:", payload);
+      
+      // await addProduct(payload);
       onSuccess?.();
       reset();
       Promise.resolve().then(() => {
@@ -173,11 +177,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
           name="image"
           control={control}
           render={({ field }) => (
-            <BaseInput
-              label="Link ảnh"
-              required
+            <BaseUpload
+              id="image"
+               {...field}
+              label="Hình ảnh"
               error={errors.image?.message}
-              {...field}
+              onChange={(file) => setValue("image", file)}
             />
           )}
         />

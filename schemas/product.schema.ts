@@ -17,7 +17,7 @@ export const ProductSchema = z.object({
   price: z.number().min(0, "Giá phải lớn hơn hoặc bằng 0"),
   quantity: z.number().int().min(0, "Số lượng phải lớn hơn hoặc bằng 0"),
   type: z.string().optional(), // nếu không dùng thì optional
-  image: z.string().url("Link ảnh không hợp lệ"),
+  image: z.instanceof(File).optional().nullable(),
   categoryId: z.number().int().positive("Danh mục là bắt buộc"), // thêm nếu cần
 });
 // export const ProductSchema = z.object({
