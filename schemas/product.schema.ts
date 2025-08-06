@@ -11,4 +11,24 @@ export const CategorySchema = z.object({
   description: z.string().optional().or(z.literal("")),
 });
 
+export const ProductSchema = z.object({
+  name: z.string().min(1, "Vui lòng nhập tên sản phẩm"),
+  description: z.string().min(1, "Vui lòng nhập mô tả"),
+  price: z.number().min(0, "Giá phải lớn hơn hoặc bằng 0"),
+  quantity: z.number().int().min(0, "Số lượng phải lớn hơn hoặc bằng 0"),
+  type: z.string().optional(), // nếu không dùng thì optional
+  image: z.string().url("Link ảnh không hợp lệ"),
+  categoryId: z.number().int().positive("Danh mục là bắt buộc"), // thêm nếu cần
+});
+// export const ProductSchema = z.object({
+//   name: z.string(), // Không bắt min
+//   description: z.string(), // Không bắt min
+//   price: z.number(), // Không cần >= 0
+//   quantity: z.number().int(), // Không cần >= 0
+//   type: z.string().optional(), // Tùy chọn
+//   image: z.string(), // Không kiểm tra URL
+//   categoryId: z.number().int(), // Không cần positive
+// });
+
 export type CategoryInput = z.infer<typeof CategorySchema>;
+export type ProductInput = z.infer<typeof ProductSchema>;

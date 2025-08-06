@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button, Pagination } from "antd";
-import AddProductModal, { ProductFormData } from "@/components/ui/AddProductModal";
+import AddProductModal from "@/components/ui/AddProductModal";
 
 // Fake 30 sản phẩm
 const generateMockProducts = () => {
@@ -31,18 +31,6 @@ const AdminProductPage = () => {
         (currentPage - 1) * pageSize,
         currentPage * pageSize
     );
-
-    const handleAddProduct = (data: ProductFormData) => {
-        const newProduct = {
-            ...data,
-            id: products.length + 1,
-            image:
-                data.image ||
-                `https://via.placeholder.com/80x80.png?text=${encodeURIComponent(data.name)}`,
-        };
-        setProducts([newProduct, ...products]);
-        setIsModalOpen(false);
-    };
 
     return (
         <div className="p-6">
@@ -114,7 +102,7 @@ const AdminProductPage = () => {
             <AddProductModal
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSubmit={handleAddProduct}
+                // onSubmit={handleAddProduct}
             />
         </div>
     );
