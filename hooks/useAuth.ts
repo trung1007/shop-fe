@@ -25,11 +25,12 @@ export const useRegister = () => {
   });
 };
 
-export const useLogin = () => {
+export const useAuthMutation = (
+  mutationFn: (data: any) => Promise<any>
+) =>  {
   const dispatch = useDispatch();
-
   return useMutation({
-    mutationFn: (data: LoginInput) => loginUser(data),
+    mutationFn,
     onSuccess: (data) => {
       const { token, user } = data;
       Cookies.set("access_token", token?.accessToken);
@@ -43,7 +44,7 @@ export const useLogin = () => {
       console.error("Đăng nhập thất bại", error);
     },
   });
-};
+}
 
 export const useUpdate = () => {
   const dispatch = useDispatch();
