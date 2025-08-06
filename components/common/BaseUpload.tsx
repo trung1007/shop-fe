@@ -36,8 +36,9 @@ const BaseUpload: React.FC<BaseUploadProps> = ({
         },
       });
 
-      const fileUrl = response.data.fileUrl;
-      setPreview(fileUrl);
+      const fileName = response.data.fileName;
+      
+      setPreview(fileName);
       onChange?.(file);
     } catch (err) {
       console.error("Lỗi upload ảnh:", err);
