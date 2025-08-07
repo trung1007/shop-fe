@@ -9,6 +9,10 @@ import { addProduct, getListCategories } from "@/services/productService";
 import { ProductInput, ProductSchema } from "@/schemas/product.schema";
 import BaseInput from "@/components/common/BaseInput";
 import BaseDropdown from "../common/BaseDropdown";
+import BaseUpload from "../common/BaseUpload";
+import { uploadFile } from "@/services";
+import { useDispatch } from "react-redux";
+import { showLoading, hideLoading } from "@/stores/loadingSlice";
 
 interface AddProductModalProps {
   open: boolean;
@@ -31,13 +35,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<ProductInput>({
     defaultValues: {
       name: "",
       price: 0,
       quantity: 0,
-      image: "",
+      image: null,
       description: "",
     },
     resolver: zodResolver(ProductSchema),
@@ -48,6 +53,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [categoryOptions, setCategoryOptions] = useState<
     { label: string; value: number }[]
   >([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -70,23 +77,32 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const watchedQuantity = watch("quantity");
 
   const handleFormSubmit = async (data: ProductInput) => {
+    dispatch(showLoading());
     try {
-      const payload = {
+      let imageUrl = null;
+      if (data.image) {
+        const uploadResponse = await uploadFile(data.image);
+        imageUrl = uploadResponse?.fileName || null;
+      }
+      const payloadAddProduct = {
         name: data.name,
         description: data.description,
         price: data.price,
-        imageUrl: data.image,
+        imageUrl: imageUrl,
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      await addProduct(payload);
+      await addProduct(payloadAddProduct);
       onSuccess?.();
       reset();
       Promise.resolve().then(() => {
         onClose();
       });
+      dispatch(hideLoading());
     } catch (error) {
       console.error("Lỗi khi thêm sản phẩm:", error);
+    } finally {
+      dispatch(hideLoading());
     }
   };
 
@@ -173,11 +189,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
           name="image"
           control={control}
           render={({ field }) => (
-            <BaseInput
-              label="Link ảnh"
-              required
-              error={errors.image?.message}
+            <BaseUpload
+              id="image"
               {...field}
+              label="Hình ảnh"
+              error={errors.image?.message}
+              onChange={(file) => setValue("image", file)}
             />
           )}
         />
