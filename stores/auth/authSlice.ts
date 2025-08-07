@@ -13,12 +13,14 @@ interface AuthState {
   user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
+  isRedirecting: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   accessToken: null,
   refreshToken: null,
+  isRedirecting: false,
 };
 
 const authSlice = createSlice({
@@ -40,8 +42,11 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.user = null;
     },
+    setIsRedirecting(state, action: PayloadAction<boolean>) {
+      state.isRedirecting = action.payload;
+    },
   },
 });
 
-export const { setUser, setAccessToken, setRefreshToken, logoutUser } = authSlice.actions;
+export const { setUser, setAccessToken, setRefreshToken, logoutUser, setIsRedirecting  } = authSlice.actions;
 export default authSlice.reducer;

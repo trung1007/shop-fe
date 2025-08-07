@@ -6,31 +6,31 @@ import { Button, Pagination } from "antd";
 import AddProductModal from "@/components/ui/AddProductModal";
 
 // Fake 30 sản phẩm
-const generateMockProducts = () => {
-    const types = ["laptop", "phone", "headphone"];
-    const names = ["ASUS ROG", "iPhone", "Sony", "Samsung", "Dell", "HP", "JBL"];
-    return Array.from({ length: 30 }, (_, i) => ({
-        id: i + 1,
-        name: `${names[i % names.length]} #${i + 1}`,
-        image: `https://via.placeholder.com/80x80.png?text=${encodeURIComponent(
-            names[i % names.length]
-        )}`,
-        price: 1000000 + (i % 10) * 1000000,
-        quantity: Math.floor(Math.random() * 20) + 1,
-        type: types[i % types.length],
-    }));
-};
+// const generateMockProducts = () => {
+//     const types = ["laptop", "phone", "headphone"];
+//     const names = ["ASUS ROG", "iPhone", "Sony", "Samsung", "Dell", "HP", "JBL"];
+//     return Array.from({ length: 30 }, (_, i) => ({
+//         id: i + 1,
+//         name: `${names[i % names.length]} #${i + 1}`,
+//         image: `https://via.placeholder.com/80x80.png?text=${encodeURIComponent(
+//             names[i % names.length]
+//         )}`,
+//         price: 1000000 + (i % 10) * 1000000,
+//         quantity: Math.floor(Math.random() * 20) + 1,
+//         type: types[i % types.length],
+//     }));
+// };
 
 const AdminProductPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [products, setProducts] = useState(generateMockProducts());
+    // const [products, setProducts] = useState(generateMockProducts());
     const [currentPage, setCurrentPage] = useState(1);
 
     const pageSize = 10;
-    const currentProducts = products.slice(
-        (currentPage - 1) * pageSize,
-        currentPage * pageSize
-    );
+    // const currentProducts = products.slice(
+    //     (currentPage - 1) * pageSize,
+    //     currentPage * pageSize
+    // );
 
     return (
         <div className="p-6">
@@ -41,7 +41,7 @@ const AdminProductPage = () => {
                 </Button>
             </div>
 
-            <div className="overflow-x-auto">
+            {/* <div className="overflow-x-auto">
                 <table className="min-w-full bg-white shadow border border-gray-200 rounded-lg">
                     <thead className="bg-gray-100">
                         <tr>
@@ -87,9 +87,9 @@ const AdminProductPage = () => {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div> */}
 
-            <div className="mt-4 flex justify-end">
+            {/* <div className="mt-4 flex justify-end">
                 <Pagination
                     current={currentPage}
                     pageSize={pageSize}
@@ -97,7 +97,7 @@ const AdminProductPage = () => {
                     onChange={(page) => setCurrentPage(page)}
                     showSizeChanger={false}
                 />
-            </div>
+            </div> */}
 
             <AddProductModal
                 open={isModalOpen}
