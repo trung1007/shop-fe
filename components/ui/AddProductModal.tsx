@@ -10,6 +10,9 @@ import { ProductInput, ProductSchema } from "@/schemas/product.schema";
 import BaseInput from "@/components/common/BaseInput";
 import BaseDropdown from "../common/BaseDropdown";
 import BaseUpload from "../common/BaseUpload";
+import { uploadFile } from "@/services";
+import { useDispatch } from "react-redux";
+import { showLoading, hideLoading } from "@/stores/loadingSlice";
 
 interface AddProductModalProps {
   open: boolean;
@@ -51,6 +54,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     { label: string; value: number }[]
   >([]);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -72,25 +77,32 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const watchedQuantity = watch("quantity");
 
   const handleFormSubmit = async (data: ProductInput) => {
+    dispatch(showLoading());
     try {
-      const payload = {
+      let imageUrl = null;
+      if (data.image) {
+        const uploadResponse = await uploadFile(data.image);
+        imageUrl = uploadResponse?.fileName || null;
+      }
+      const payloadAddProduct = {
         name: data.name,
         description: data.description,
         price: data.price,
-        imageUrl: data.image,
+        imageUrl: imageUrl,
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      console.log("Submitting product data:", payload);
-      
-      // await addProduct(payload);
+      await addProduct(payloadAddProduct);
       onSuccess?.();
       reset();
       Promise.resolve().then(() => {
         onClose();
       });
+      dispatch(hideLoading());
     } catch (error) {
       console.error("Lỗi khi thêm sản phẩm:", error);
+    } finally {
+      dispatch(hideLoading());
     }
   };
 
@@ -179,7 +191,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
           render={({ field }) => (
             <BaseUpload
               id="image"
-               {...field}
+              {...field}
               label="Hình ảnh"
               error={errors.image?.message}
               onChange={(file) => setValue("image", file)}
