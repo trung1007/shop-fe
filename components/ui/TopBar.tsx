@@ -11,9 +11,22 @@ import {
 import { BsFillMegaphoneFill } from "react-icons/bs";
 import { SiShopee, SiTiktok } from "react-icons/si";
 import Link from 'next/link';
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/hooks/reduxHooks";
 
 const TopBar = () => {
-    return (
+
+  const router = useRouter()
+  const user = useAppSelector((state) => state.auth.user);
+
+  const handleClick = () => {
+    const token = Cookies.get("access_token");
+    token ? router.push("/user") : router.push("/login");
+  };
+
+
+  return (
     <div className="bg-emerald-600 text-white text-sm py-2 px-40 flex items-center justify-between">
       <div className="flex space-x-2 items-center">
         <div className="flex items-center bg-lime-200 text-emerald-900 rounded-full px-3 py-1 font-medium">
@@ -39,10 +52,10 @@ const TopBar = () => {
           <BsFillMegaphoneFill className="mr-1" />
           Tin tức
         </Link>
-        <Link href="/login" className="flex items-center hover:text-gray-200 cursor-pointer">
+        <div onClick={handleClick} className="flex items-center hover:text-gray-200 cursor-pointer">
           <FaUser className="mr-1" />
-          Đăng ký / Đăng nhập
-        </Link>
+         {user ? (<span>{user?.name}</span>) : (<span>Đăng nhập</span>) }
+        </div>
       </div>
     </div>
   );

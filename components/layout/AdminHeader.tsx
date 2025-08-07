@@ -5,13 +5,17 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { HiOutlineMenu, HiOutlineArrowLeft } from "react-icons/hi";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import AdminSideBar from "./AdminSidebar";
 
 interface AdminHeaderProps {
   onToggleSidebar?: () => void;
   isSidebarOpen?: boolean;
 }
 
-const AdminHeader = ({ onToggleSidebar, isSidebarOpen }: AdminHeaderProps) => {
+const AdminHeader = ({
+  onToggleSidebar,
+  isSidebarOpen = false,
+}: AdminHeaderProps) => {
   const user = useAppSelector((state) => state.auth.user);
   const router = useRouter();
 
