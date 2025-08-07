@@ -14,7 +14,7 @@ export default function AdminLayout({
 
   return (
     <div className="flex h-screen">
-      {/* <AdminSideBar isOpen={sidebarOpen} />
+      <AdminSideBar isOpen={sidebarOpen} />
       <div
         className="flex-1 flex flex-col transition-all duration-300"
         style={{ marginLeft: sidebarOpen ? 256 : 0 }}
@@ -23,8 +23,8 @@ export default function AdminLayout({
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           isSidebarOpen={sidebarOpen} />
         <main className="p-4 bg-gray-100 h-full overflow-y-auto">{children}</main>
-      </div> */}
-      <main className="p-4 bg-gray-100 h-full overflow-y-auto w-full">{children}</main>
+      </div>
+      {/* <main className="p-4 bg-gray-100 h-full overflow-y-auto w-full">{children}</main> */}
     </div>
   );
 }

@@ -29,48 +29,42 @@ const AdminHeader = ({
   };
 
   return (
-    <div
-      className="flex-1 flex flex-col transition-all duration-300"
-      style={{ marginLeft: isSidebarOpen ? 256 : 0 }}
-    >
-      <AdminSideBar isOpen={isSidebarOpen} />
-      <header className="bg-gray-800 text-white p-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={onToggleSidebar}
-            className="text-white transition-transform duration-300 transform hover:scale-110"
-          >
-            {isSidebarOpen ? (
-              <HiOutlineArrowLeft size={24} />
-            ) : (
-              <HiOutlineMenu size={24} />
-            )}
-          </button>
-          <h1
-            className="text-xl font-bold cursor-pointer"
-            onClick={handleLogoClick}
-          >
-            Admin Dashboard
-          </h1>
-        </div>
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={handleAccountClick}
+    <header className="bg-gray-800 text-white p-4 flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <button
+          onClick={onToggleSidebar}
+          className="text-white transition-transform duration-300 transform hover:scale-110"
         >
-          <div className="p-2 rounded-[8px] border border-gray-300">
-            <FaRegUserCircle size={20} />
-          </div>
-          {user ? (
-            <span className="font-medium text-[16px]">{user.name}</span>
+          {isSidebarOpen ? (
+            <HiOutlineArrowLeft size={24} />
           ) : (
-            <div className="flex flex-col">
-              <span className="text-xs">Tài khoản</span>
-              <span className="font-semibold">Đăng nhập</span>
-            </div>
+            <HiOutlineMenu size={24} />
           )}
+        </button>
+        <h1
+          className="text-xl font-bold cursor-pointer"
+          onClick={handleLogoClick}
+        >
+          Admin Dashboard
+        </h1>
+      </div>
+      <div
+        className="flex items-center gap-2 cursor-pointer"
+        onClick={handleAccountClick}
+      >
+        <div className="p-2 rounded-[8px] border border-gray-300">
+          <FaRegUserCircle size={20} />
         </div>
-      </header>
-    </div>
+        {user ? (
+          <span className="font-medium text-[16px]">{user.name}</span>
+        ) : (
+          <div className="flex flex-col">
+            <span className="text-xs">Tài khoản</span>
+            <span className="font-semibold">Đăng nhập</span>
+          </div>
+        )}
+      </div>
+    </header>
   );
 };
 
