@@ -43,8 +43,9 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
           transition-all duration-200 z-10 
         `}
       >
-        {options.map((option) => (
+        {options.map((option, index) => (
             <Link
+                key={index}
                 href={option.value}
                 target="_blank"
                 rel="noopener noreferrer"
