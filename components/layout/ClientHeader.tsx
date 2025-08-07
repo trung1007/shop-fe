@@ -1,26 +1,25 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/hooks/reduxHooks";
 import Header from "./Header";
-import AdminHeader from "./AdminHeader";
 
 const ClientHeader = () => {
+  const pathname = usePathname();
   const roles = useAppSelector((state) => state.auth.user?.roles);
+  const isRedirecting = useAppSelector((state) => state.auth.isRedirecting);
+
   const stableRoles = useMemo(() => roles ?? [], [roles]);
   const hasAdminRole = stableRoles.some(
     (role: any) => role.name === "ROLE_ADMIN"
   );
 
-  // return hasAdminRole ? (
-  //   <AdminHeader
-  //     onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-  //     isSidebarOpen={sidebarOpen}
-  //   />
-  // ) : (
-  //   <Header />
-  // );
-  return !hasAdminRole && (<Header />);
+  const isInAdminPath = pathname?.startsWith("/admin");
+
+  if ((hasAdminRole && !isRedirecting) || isInAdminPath) return null;
+
+  return <Header />;
 };
 
 export default ClientHeader;

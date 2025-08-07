@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/stores/store";
+import { setIsRedirecting } from "@/stores/auth/authSlice";
 
-const RedirectByRole = (pathname: any) => {
+const RedirectByRole = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const dispatch = useDispatch();
   const roles = useSelector((state: RootState) => state.auth.user?.roles);
-  const [isChecking, setIsChecking] = useState(true);
 
   const stableRoles = useMemo(() => roles ?? [], [roles]);
 
@@ -19,15 +21,13 @@ const RedirectByRole = (pathname: any) => {
       (role: any) => role.name === "ROLE_ADMIN"
     );
 
-    if (hasAdminRole) {
-      router.replace("/admin");
-      return;
-    } else {
-      setIsChecking(false);
-    }
+    const isInAdminPath = pathname?.startsWith("/admin");
 
-    console.log("pathname", pathname);
-  }, [stableRoles, router]);
+    if (hasAdminRole && !isInAdminPath) {
+      dispatch(setIsRedirecting(true)); 
+      router.replace("/admin");
+    }
+  }, [stableRoles, router, pathname, dispatch]);
 
   return null;
 };
