@@ -7,66 +7,47 @@ import { FaFacebookMessenger } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
-import '../../styles/navbar.css'
+import BaseDropdown, {DropdownOption} from "../common/BaseDropdown";
+import HoverDropdown, { HoverDropdownOption } from "../common/HoverDropdown"
+import Link from 'next/link';
 
-type FormValues = {
-  search: string;
-  category: string;
-};
-const categories = [
-  "Danh mục sản phẩm",
-  "Bàn phím cơ",
-  "Chuột & lót chuột",
-  "Tai nghe",
-];
+const contactOptions: HoverDropdownOption[] = [
+  { label: "Liên hệ Message", value: "/", icon: FaFacebookMessenger, styleIcon: "text-blue-600 mr-2 text-base" },
+  { label: "Liên hệ Zalo", value: "/", icon: SiZalo, styleIcon: "text-blue-600 mr-2 text-2xl"},
+]
 
 const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
-  const { control, handleSubmit, reset } = useForm<FormValues>({
-    defaultValues: {
-      search: "",
-      category: categories[0], // default là "Danh mục sản phẩm"
-    },
-  });
 
-  const [showDropdownCategory, setShowDropdownCategory] = useState(false);
-
-  const onSubmit = (data: FormValues) => {
-    console.log("Search:", data.search);
-    console.log("Category:", data.category);
-    // onSearch(data.search, data.category);
-    reset();
-  };
+  const categoryOptions: HoverDropdownOption[] = [
+    { label: "Công nghệ", value: "tech" },
+    { label: "Kinh doanh", value: "business" },
+    { label: "Sức khỏe", value: "health" },
+    { label: "Giáo dục", value: "education" },
+  ];
 
   return (
     <div className="flex items-center justify-between px-40 py-2 bg-white shadow">
       {/* Logo */}
       <div className="flex items-center space-x-2">
-        <div className="text-2xl font-bold text-gray-700">
+        <Link href="/" className="text-2xl font-bold text-gray-700">
           <img
-              src="/images/logo-shop.png"
-              height={80}
-              width={100}
-              className="cursor-pointer"
-            />
-        </div>
+            src="/images/logo-shop.png"
+            height={80}
+            width={100}
+            className="cursor-pointer"
+          />
+        </Link>
+        
       </div>
 
       {/* Nút Danh Mục */}
-<div className="relative group inline-block">
-  <button className="flex items-center px-3 rounded-lg py-3 bg-emerald-500 text-white hover:bg-emerald-600">
-    <FiMenu className="mr-2" />
-    DANH MỤC
-  </button>
-
-  {/* Dropdown menu */}
-  <div className="absolute left-0 mt-1 w-48 bg-white full-shadow rounded-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity z-50">
-    <ul className="py-2 text-gray-700">
-      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Danh mục 1</li>
-      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Danh mục 2</li>
-      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Danh mục 3</li>
-    </ul>
-  </div>
-</div>
+        <HoverDropdown
+        label="DANH MỤC"
+        options={categoryOptions}
+        icon={FiMenu}
+        style="flex items-center px-3 rounded-lg py-3 bg-emerald-500 hover:bg-emerald-600 text-white"
+      />
+        
 
       {/* Thanh Tìm Kiếm */}
       <div className="flex items-center rounded-lg px-4 py-2 w-1/3 transition-shadow bg-white full-shadow">
@@ -83,39 +64,19 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
         <FiPhone className="text-4xl mt-1" />
         <div className="flex flex-col leading-tight">
           <div className="text-xm text-black font-normal">Hotline</div>
-          <div className="text-lg font-bold text-emerald-600">0349.296.461</div>
+          <div className="text-lg font-bold text-emerald-600">0123.456.789</div>
         </div>
       </div>
 
       {/* Tư vấn trực tiếp */}
-      <div className="relative group inline-block">
-        <div className="flex items-center space-x-1 text-gray-700 cursor-pointer">
-          <BsFillLightningChargeFill className="text-4xl text-emerald-500" />
-          <span className="text-xm">Tư vấn trực tiếp</span>
-        </div>
-
-        {/* Dropdown */}
-        <div className="absolute left-0 mt-2 w-48 bg-white rounded full-shadow opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-200 z-10">
-          <a
-            href="https://m.me/yourpage"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          >
-            <FaFacebookMessenger className="text-blue-600 mr-2 text-base" />
-            Liên hệ Messenger
-          </a>
-          <a
-            href="https://zalo.me/yourzaloid"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          >
-            <SiZalo className="text-blue-600 mr-2 text-2xl" />
-            Liên hệ Zalo
-          </a>
-        </div>
-      </div>
+        <HoverDropdown
+        label="Tư vấn trực tiếp"
+        options={contactOptions}
+        icon={BsFillLightningChargeFill}
+        style="flex items-center space-x-1 text-gray-700 cursor-pointer"
+        iconStyle="text-4xl text-emerald-500"
+        dropdownWidth="w-42"
+      />
 
       {/* Giỏ hàng */}
       <div className="relative">

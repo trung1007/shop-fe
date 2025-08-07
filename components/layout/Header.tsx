@@ -12,6 +12,7 @@ import NavBar from "../ui/NavBar";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/hooks/reduxHooks";
 import MenuBar from "../ui/MenuBar";
+import TopBar from "../ui/TopBar";
 // import MenuBar from "../ui/MenuBar";
 
 const Header = () => {
@@ -48,8 +49,8 @@ const Header = () => {
 
   return (
     <>
-      {isSticky && <div className="h-[64px]" />}
-
+      {/* {isSticky && <div className="h-[64px]" />} */}
+      <TopBar />
       <header
         ref={headerRef}
         className={`header-wrapper  w-full h-fit flex flex-col transition-all duration-200 ease-in-out ${isSticky
@@ -58,57 +59,6 @@ const Header = () => {
           }`}
       >
         <NavBar onSearch={(val) => { }} />
-
-        {/* <div className="header-container py-4 h-fit min-h-[48px] w-full px-[64px] grid grid-cols-[3fr_6fr_3fr] items-center"> */}
-          {/* <div className="header-logo flex justify-start items-center">
-            <img
-              src="https://bizweb.dktcdn.net/100/502/483/themes/1011801/assets/logo.png?1748850004905"
-              alt="Logo T&D"
-              height={80}
-              width={120}
-              onClick={onLogoReload}
-              className="cursor-pointer"
-            />
-
-          </div> */}
-
-          {/* <div className="header-func min-w-[20%] h-8 flex gap-3 justify-end items-center">
-            {user ? (
-              <div
-                className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer"
-                onClick={handleClick}
-              >
-                <div className="p-2 rounded-[8px] border border-gray-300 ">
-                  <FaRegUserCircle size={20} />
-                </div>
-                <span className="font-medium text-[16px] block">{user?.name}</span>
-              </div>
-            ) : (
-              <div
-                className="user flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer"
-                onClick={handleClick}
-              >
-                <div className="p-2 rounded-[8px] border border-gray-300 ">
-                  <FaRegUserCircle size={20} />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs">Tài khoản</span>
-                  <span className="font-semibold block">Đăng nhập</span>
-                </div>
-              </div>
-            )}
-
-            <div className="cart flex gap-2 items-center hover:bg-gray-100 p-2 rounded cursor-pointer">
-              <div className="p-2 rounded-[8px] border border-gray-300 ">
-                <FiShoppingCart size={20} />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xs">Giỏ hàng</span>
-                <span className="font-semibold block">0 sản phẩm</span>
-              </div>
-            </div>
-          </div> */}
-        {/* </div> */}
 
         {/* <MenuBar /> */}
       </header>
