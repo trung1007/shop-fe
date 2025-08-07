@@ -5,9 +5,9 @@ import { FiMenu, FiSearch, FiPhone, FiShoppingCart } from 'react-icons/fi';
 import { BsFillLightningChargeFill } from 'react-icons/bs';
 import { FaFacebookMessenger } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
-
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
+import '../../styles/navbar.css'
 
 type FormValues = {
   search: string;
@@ -28,7 +28,7 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
     },
   });
 
-  const [selectedCategory, setSelectedCategory] = useState("Danh mục sản phẩm");
+  const [showDropdownCategory, setShowDropdownCategory] = useState(false);
 
   const onSubmit = (data: FormValues) => {
     console.log("Search:", data.search);
@@ -52,13 +52,24 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
       </div>
 
       {/* Nút Danh Mục */}
-      <button className="flex items-center px-3 rounded-lg py-3 bg-emerald-500 text-white hover:bg-emerald-600">
-        <FiMenu className="mr-2" />
-        DANH MỤC
-      </button>
+<div className="relative group inline-block">
+  <button className="flex items-center px-3 rounded-lg py-3 bg-emerald-500 text-white hover:bg-emerald-600">
+    <FiMenu className="mr-2" />
+    DANH MỤC
+  </button>
+
+  {/* Dropdown menu */}
+  <div className="absolute left-0 mt-1 w-48 bg-white full-shadow rounded-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity z-50">
+    <ul className="py-2 text-gray-700">
+      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Danh mục 1</li>
+      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Danh mục 2</li>
+      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Danh mục 3</li>
+    </ul>
+  </div>
+</div>
 
       {/* Thanh Tìm Kiếm */}
-      <div className="flex items-center rounded-lg px-4 py-2 w-1/3 transition-shadow bg-white search-field">
+      <div className="flex items-center rounded-lg px-4 py-2 w-1/3 transition-shadow bg-white full-shadow">
         <FiSearch className="text-gray-500 mr-3 text-3xl" />
         <input
           type="text"
@@ -84,7 +95,7 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
         </div>
 
         {/* Dropdown */}
-        <div className="absolute left-0 mt-2 w-48 bg-white rounded shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-200 z-10">
+        <div className="absolute left-0 mt-2 w-48 bg-white rounded full-shadow opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-200 z-10">
           <a
             href="https://m.me/yourpage"
             target="_blank"
