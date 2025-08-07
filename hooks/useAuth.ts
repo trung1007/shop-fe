@@ -33,12 +33,11 @@ export const useAuthMutation = (
     mutationFn,
     onSuccess: (data) => {
       const { token, user } = data;
-
       Cookies.set("access_token", token?.accessToken);
       Cookies.set("refresh_token", token?.refreshToken);
-
       dispatch(setAccessToken(token?.accessToken));
       dispatch(setRefreshToken(token?.refreshToken));
+
       dispatch(setUser(user));
     },
     onError: (error: any) => {
@@ -61,3 +60,4 @@ export const useUpdate = () => {
     },
   });
 };
+

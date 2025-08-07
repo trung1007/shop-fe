@@ -3,12 +3,13 @@
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { logout } from "@/stores/auth/authSlice";
+import { logoutUser } from "@/stores/auth/authSlice";
 import Cookies from "js-cookie";
 import SideBarInfor from "@/components/ui/SideBarInfor";
 import { useForm } from "react-hook-form";
 import { useUpdate } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
+import { logout } from "@/services/authService";
 
 type FormValues = {
   name: string;
@@ -49,11 +50,24 @@ const UserInfoPage = () => {
     }
   }, [user, isLoggingOut, reset, router]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsLoggingOut(true);
-    Cookies.remove("access_token");
-    dispatch(logout());
-    setTimeout(() => router.push("/login"), 1000);
+    try {
+      const refreshToken = Cookies.get("refresh_token");
+      if (!refreshToken) {
+        console.error("No refresh token found");
+        return;
+      }
+
+      await logout(refreshToken);
+      console.log("Logging out with refresh token:", refreshToken);
+      Cookies.remove("refresh_token");
+      Cookies.remove("access_token");
+      dispatch(logoutUser());
+      setTimeout(() => router.push("/login"), 1000);
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   const onSubmit = (data: FormValues) => {
