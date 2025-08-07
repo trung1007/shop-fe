@@ -5,7 +5,15 @@ export const getListCategories = async () => {
   return response.data;
 }
 
-export const addProduct = async (data: any) => {
-  const response = await api.post("/product/add", data);
+export const addProduct = async (product: any, fileImage: any) => {
+  const formData = new FormData();
+  formData.append("product", new Blob([JSON.stringify(product)], { type: "application/json" }));
+  formData.append("fileImage", fileImage)
+  const response = await api.post("/product/add", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+  );
   return response.data;
 }

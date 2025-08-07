@@ -79,20 +79,14 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const handleFormSubmit = async (data: ProductInput) => {
     dispatch(showLoading());
     try {
-      let imageUrl = null;
-      if (data.image) {
-        const uploadResponse = await uploadFile(data.image);
-        imageUrl = uploadResponse?.fileName || null;
-      }
       const payloadAddProduct = {
         name: data.name,
         description: data.description,
         price: data.price,
-        imageUrl: imageUrl,
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      await addProduct(payloadAddProduct);
+      await addProduct(payloadAddProduct, data.image);
       onSuccess?.();
       reset();
       Promise.resolve().then(() => {
