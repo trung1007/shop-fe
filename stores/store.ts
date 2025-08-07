@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth/authSlice";
+import loadReducer from "./loadingSlice";
 import {
   persistStore,
   persistReducer,
@@ -15,6 +16,7 @@ import { combineReducers } from "redux";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  loading: loadReducer,
 });
 
 const persistConfig = {

@@ -5,6 +5,7 @@ import "@/styles/global.css";
 import Providers from "@/providers";
 import RedirectByRole from "@/components/RedirectByRole";
 import { usePathname } from "next/navigation";
+import Loading from "@/components/common/Loading";
 
 export default function RootLayout({
   children,
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <RedirectByRole />
+          <Loading />
           {!isAdmin && <Header />}
           {children}
           <Footer />
