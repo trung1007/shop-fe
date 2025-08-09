@@ -26,7 +26,7 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
   ];
 
   return (
-    <div className="flex items-center justify-between px-40 py-2 bg-white shadow">
+    <div className="w-full flex items-center justify-between px-40 py-2 bg-white shadow">
       {/* Logo */}
       <div className="flex items-center space-x-2">
         <Link href="/" className="text-2xl font-bold text-gray-700">

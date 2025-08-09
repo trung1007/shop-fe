@@ -28,7 +28,6 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
   iconStyle,
   dropdownWidth
 }) => {
-    console.log(dropdownWidth)
   return (
     <div className="relative group inline-block w-fit">
       <div className={`font-medium cursor-pointer ${style || ""}`}>

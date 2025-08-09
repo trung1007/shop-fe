@@ -10,7 +10,13 @@ const ListCollection = () => {
     const fetchData = async () => {
       try {
         const data = await getListCategories();
-        setCategories(data);
+
+        // Fake thêm dữ liệu bằng cách nhân bản
+        const fakeData = Array(4)
+          .fill(data)
+          .flat();
+
+        setCategories(fakeData);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -18,16 +24,21 @@ const ListCollection = () => {
 
     fetchData();
   }, []);
- 
+
   return (
-    <div className="grid grid-cols-4 divide-x divide-gray-300 border border-gray-300 ">
-      {categories.map((item, index) => (
-        <CollectionCard
-          key={index}
-          img={item?.img}
-          code={item?.code}
-        />
-      ))}
+    <div className="bg-[white] rounded-lg mx-[64px] mt-[60px]">
+      <div className="grid grid-cols-8 divide-x divide-y divide-gray-200">
+        {categories.map((item, index) => (
+          <div
+            key={index}
+            className={`
+        ${((index + 1) % 8 === 0) ? "border-r-0" : ""}
+      `}
+          >
+            <CollectionCard img={item?.img} name={item?.name} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -3,12 +3,13 @@
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { logout } from "@/stores/auth/authSlice";
+import { logoutUser } from "@/stores/auth/authSlice";
 import Cookies from "js-cookie";
 import SideBarInfor from "@/components/ui/SideBarInfor";
 import { useForm } from "react-hook-form";
 import { useUpdate } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
+import { logout } from "@/services/authService";
 
 type ChangePassForm = {
     current: string;
@@ -48,12 +49,23 @@ const ChangePassPage = () => {
             });
         }
     }, [user, isLoggingOut, reset, router]);
+    const handleLogout = async () => {
+        try {
+            const refreshToken = Cookies.get("refresh_token");
+            if (!refreshToken) {
+                console.error("No refresh token found");
+                return;
+            }
 
-    const handleLogout = () => {
-        setIsLoggingOut(true);
-        Cookies.remove("access_token");
-        dispatch(logout());
-        setTimeout(() => router.push("/login"), 1000);
+            await logout(refreshToken);
+            console.log("Logging out with refresh token:", refreshToken);
+            Cookies.remove("refresh_token");
+            Cookies.remove("access_token");
+            dispatch(logoutUser());
+            router.push("/login");
+        } catch (error) {
+            console.error("Error logging out:", error);
+        }
     };
 
     const onSubmit = (data: ChangePassForm) => {
@@ -116,8 +128,8 @@ const ChangePassPage = () => {
                                     type="submit"
                                     disabled={!isDirty}
                                     className={`mt-6 px-4 py-2 rounded text-white transition-all ${isDirty
-                                            ? "bg-black hover:bg-gray-800"
-                                            : "bg-gray-400 cursor-not-allowed"
+                                        ? "bg-black hover:bg-gray-800"
+                                        : "bg-gray-400 cursor-not-allowed"
                                         }`}
                                 >
                                     Lưu thông tin

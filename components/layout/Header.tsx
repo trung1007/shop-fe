@@ -42,18 +42,13 @@ const Header = () => {
 
   const onLogoReload = () => router.push("/");
   
-  useEffect(()=>{
-    console.log(user);
-    
-  },[user])
-
   return (
     <>
       {/* {isSticky && <div className="h-[64px]" />} */}
       <TopBar />
       <header
         ref={headerRef}
-        className={`header-wrapper  w-full h-fit flex flex-col transition-all duration-200 ease-in-out ${isSticky
+        className={`header-wrapper  w-full h-fit flex  transition-all duration-200 ease-in-out ${isSticky
           ? "fixed top-0 left-0 z-50 bg-white shadow-md"
           : "relative bg-transparent"
           }`}
