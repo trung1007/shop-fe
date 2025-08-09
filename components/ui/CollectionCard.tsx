@@ -1,27 +1,24 @@
 import Image from "next/image";
 
-type Props = {
+interface Props {
   img: string;
-  code: string;
-};
+  name: string;
+}
 
-const CollectionCard = ({ img, code }: Props) => {
+const CollectionCard = ({ img, name }: Props) => {
   return (
-    <div className="w-full h-full  flex flex-col justify-center items-center  p-4 ">
-      <div className="w-full h-[80px] flex justify-center">
-        <div className="relative w-[60px] h-[60px] transition-all duration-300 hover:w-[80px] hover:h-[80px]">
-          <Image
-            src={img}
-            alt={code}
-            fill
-            sizes="(max-width: 768px) 60px, (max-width: 1024px) 80px, 80px"
-            className="object-cover"
-          />
-        </div>
+    <div className="flex flex-col items-center cursor-pointer p-4">
+      <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden 
+                      transition-transform hover:scale-110">
+        <Image
+          src={img}
+          alt={name}
+          width={60}
+          height={60}
+          className="object-contain"
+        />
       </div>
-      <div className=" flex items-center justify-center text-sm font-medium">
-        {code}
-      </div>
+      <p className="mt-2 text-sm text-center">{name}</p>
     </div>
   );
 };

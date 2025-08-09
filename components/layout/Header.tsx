@@ -42,11 +42,6 @@ const Header = () => {
 
   const onLogoReload = () => router.push("/");
   
-  useEffect(()=>{
-    console.log(user);
-    
-  },[user])
-
   return (
     <>
       {/* {isSticky && <div className="h-[64px]" />} */}

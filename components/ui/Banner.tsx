@@ -9,6 +9,7 @@ import MainBanner2 from "@/public/images/main-banner-2.jpg"; // ảnh khác
 import SubBanner1 from "@/public/images/sub-banner-1.jpg";
 import SubBanner2 from "@/public/images/sub-banner-2.jpg";
 import SubBanner3 from "@/public/images/sub-banner-3.jpg";
+import SupportBar from "./SupportBar";
 
 const mainBanners = [MainBanner1, MainBanner2];
 
@@ -26,7 +27,7 @@ const Banner = () => {
 
     return (
         <div
-            className="relative flex gap-4 px-[64px] py-6 transition-all duration-700"
+            className=" banner-container relative flex gap-4 px-[64px] py-[40px] transition-all duration-700"
             style={{
                 backgroundImage: `url(${mainBanners[currentIndex].src})`,
                 backgroundSize: "cover",
@@ -67,6 +68,9 @@ const Banner = () => {
                         />
                     </div>
                 ))}
+            </div>
+            <div className="absolute bottom-[-56px] left-0 right-0 px-[64px] py-4 z-20">
+                <SupportBar />
             </div>
         </div>
     );
