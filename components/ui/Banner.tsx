@@ -33,11 +33,8 @@ const Banner = () => {
                 backgroundPosition: "center",
             }}
         >
-            {/* Lớp phủ mờ */}
-            <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-0"></div>
-
-            {/* Main Banner */}
-            <div className="flex-1 overflow-hidden rounded-lg relative aspect-[16/9] z-10">
+            <div className=" blur-container absolute inset-0 bg-black/30 backdrop-blur-sm z-0"></div>
+            <div className=" main-banner flex-1 overflow-hidden rounded-lg relative aspect-[16/9] z-10">
                 <div
                     className="flex transition-transform duration-700 ease-in-out h-full"
                     style={{
@@ -56,8 +53,7 @@ const Banner = () => {
                     ))}
                 </div>
             </div>
-            {/* Sub Banners */}
-            <div className="flex flex-col gap-4 w-1/3">
+            <div className=" sub-banner flex flex-col gap-4 w-1/3">
                 {[SubBanner1, SubBanner2, SubBanner3].map((img, index) => (
                     <div
                         key={index}
