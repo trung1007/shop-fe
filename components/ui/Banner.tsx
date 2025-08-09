@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-import MainBanner1 from "@/public/images/main-banner.jpg";
-import MainBanner2 from "@/public/images/main-banner-2.jpg"; // ảnh khác
+import MainBanner1 from "@/assets/images/main-banner.jpg";
+import MainBanner2 from "@/assets/images/main-banner-2.jpg"; // ảnh khác
 
-import SubBanner1 from "@/public/images/sub-banner-1.jpg";
-import SubBanner2 from "@/public/images/sub-banner-2.jpg";
-import SubBanner3 from "@/public/images/sub-banner-3.jpg";
+import SubBanner1 from "@/assets/images/sub-banner-1.jpg";
+import SubBanner2 from "@/assets/images/sub-banner-2.jpg";
+import SubBanner3 from "@/assets/images/sub-banner-3.jpg";
 import SupportBar from "./SupportBar";
 
 const mainBanners = [MainBanner1, MainBanner2];
