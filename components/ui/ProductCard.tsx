@@ -4,9 +4,9 @@ import productImg1 from "@/assets/images/product-img-test-2.png";
 
 const ProductCard = () => {
     return (
-        <div className="group relative w-full flex flex-col items-center cursor-pointer">
-            {/* Card content */}
-            <div className="product-card flex flex-col gap-2 px-4 py-3 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 w-full">
+        <div className="group relative w-full flex flex-col">
+            <div className="product-card relative flex flex-col gap-2 px-4 py-3 bg-white rounded-[8px] shadow-md hover:shadow-lg transition-shadow duration-300 w-full">
+
                 {/* Ảnh */}
                 <div className="relative w-full aspect-square overflow-hidden">
                     <Image
@@ -24,7 +24,7 @@ const ProductCard = () => {
                 </div>
 
                 {/* Tên sản phẩm */}
-                <p className="text-sm font-medium line-clamp-2">
+                <p className="text-sm font-medium line-clamp-2 cursor-pointer hover:text-[var(--color-primary)]">
                     Bàn phím cơ Aula F75 (Mạch xuôi 5 pin, Gasket Mount, Led RGB, Switch Outemu)
                 </p>
 
@@ -41,16 +41,19 @@ const ProductCard = () => {
                     -16%
                 </div>
 
-                {/* Button bên dưới, ẩn/hiện khi hover */}
+                {/* Button overlay */}
                 <div
-                    className="overflow-hidden max-h-0 group-hover:max-h-20 transition-all duration-300 flex justify-center"
+                    className="absolute h-fit  bg-[white] bottom-0 left-0 w-full flex justify-center pb-3
+                       opacity-0 translate-y-[12px] transition-all duration-300 ease-out
+                       group-hover:opacity-100 group-hover:translate-y-[48px] rounded-b-[8px]"
                 >
-                    <button className="mt-2 bg-[var(--color-button)] text-white px-6 py-2 rounded-full shadow-md">
+                    <button className="bg-[var(--color-button)] text-white px-6 py-2 rounded-full shadow-md">
                         Thêm vào giỏ
                     </button>
                 </div>
             </div>
         </div>
+
     );
 };
 
