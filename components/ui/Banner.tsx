@@ -48,6 +48,7 @@ const Banner = () => {
                                 src={img}
                                 alt={`Main Banner ${index + 1}`}
                                 fill
+                                sizes="(max-width: 1024px) 100vw, 66vw"
                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                             />
                         </div>
@@ -64,6 +65,7 @@ const Banner = () => {
                             src={img}
                             alt={`Sub Banner ${index + 1}`}
                             fill
+                            sizes="(max-width: 1024px) 100vw, 33vw"
                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                     </div>
