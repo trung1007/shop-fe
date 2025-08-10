@@ -26,7 +26,7 @@ const ListCollection = () => {
   }, []);
 
   return (
-    <div className="bg-[white] rounded-lg mx-[64px] mt-[60px]">
+    <div className="bg-[white] rounded-lg mt-[60px]">
       <div className="grid grid-cols-8 divide-x divide-y divide-gray-200">
         {categories.map((item, index) => (
           <div
