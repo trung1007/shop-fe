@@ -7,7 +7,10 @@ export default function Home() {
   return (
     <div className=" bg-[var(--color-bg)] pb-[60px] " >
       <Banner />
-      <ListCollection />
+      <div className="px-[64px]">
+        <ListCollection />
+
+      </div>
       <GroupProduct groupTitle="Gợi ý hôm nay" />
       <GroupProduct groupTitle="Sản phẩm bán chạy" />
       <GroupProduct groupTitle="Siêu giảm giá" />

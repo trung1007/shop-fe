@@ -39,7 +39,7 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
         className={`
           absolute mt-2 bg-white rounded-md full-shadow ${dropdownWidth || ""}
           opacity-0 invisible group-hover:opacity-100 group-hover:visible
-          transition-all duration-200 z-10 
+          transition-all duration-200 z-1000 
         `}
       >
         {options.map((option, index) => (
