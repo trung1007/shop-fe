@@ -37,7 +37,6 @@ interface Field {
 function useCommonRepository<T>(
   fetchApi: (params: FetchApiParams) => Promise<FetchApiResponse<T>>,
   queryParams: Record<string, any> = {},
-  options?: Partial<UseCommonRepositoryOptions<T>>
 ) {
   const router = useRouter();
   const pathname = usePathname();
@@ -45,7 +44,6 @@ function useCommonRepository<T>(
 
   const mergedOptions: UseCommonRepositoryOptions<T> = {
     fetchApi,
-    ...options,
   };
 
   const [records, setRecords] = useState<T[]>([]);
