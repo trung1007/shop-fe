@@ -11,10 +11,13 @@ export default function Home() {
         <ListCollection />
 
       </div>
+      <GroupProduct groupTitle="Tất cả sản phẩm" type="all" />
+
       <GroupProduct groupTitle="Gợi ý hôm nay" />
       <GroupProduct groupTitle="Sản phẩm bán chạy" />
       <GroupProduct groupTitle="Siêu giảm giá" />
       <GroupProduct groupTitle="Gợi ý hôm nay" />
+
 
 
     </div>
