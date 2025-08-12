@@ -1,8 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import ProductCard from "./ProductCard";
 import { FaAngleRight } from "react-icons/fa";
+import useCommonRepository from "@/hooks/useCommonRepository";
+import { getAllProducts } from "@/services/productService";
 
 const GroupProduct = ({ groupTitle }: any) => {
+
+    const {
+        records,
+        totalRecords,
+        fetching,
+        fetchRecords,
+        onParamsChange,
+        sortField,
+    } = useCommonRepository(getAllProducts)
+
+    console.log(records)
     return (
         <div className="group-product flex flex-col gap-2 w-full px-[64px] mt-[60px] ">
             <div className="w-full bg-[white] flex items-center justify-between px-5 py-3 rounded-[8px] " >

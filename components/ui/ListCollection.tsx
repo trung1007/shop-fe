@@ -10,13 +10,7 @@ const ListCollection = () => {
     const fetchData = async () => {
       try {
         const data = await getListCategories();
-
-        // Fake thêm dữ liệu bằng cách nhân bản
-        const fakeData = Array(4)
-          .fill(data)
-          .flat();
-
-        setCategories(fakeData);
+        setCategories(data);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
