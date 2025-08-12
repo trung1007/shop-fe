@@ -2,23 +2,58 @@
 import BreadCrumb from "@/components/common/BreadCrumb";
 import ListCollection from "@/components/ui/ListCollection";
 import ProductCard from "@/components/ui/ProductCard"
+import ProductCardTmp from "@/components/ui/ProductCardTmp";
+import { ProductType, ProductTypeTitle } from "@/const/enum";
+import useCommonRepository from "@/hooks/useCommonRepository";
+import useProduct from "@/hooks/useProduct";
+import useQueryClient from "@/hooks/useProduct";
+import { getAllProducts } from "@/services/productService";
 import { Divider } from "antd";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
+type Product = {
+    id: number;
+    name: string;
+    price: number;
+    // thêm field khác...
+};
+
 const Product = () => {
+
+    const searchParams = useSearchParams();
+    const typeParam = searchParams.get("type") as ProductType | null;
+    const type = typeParam?.toUpperCase() as keyof typeof ProductType;
+
+    const productTitle =
+        type && ProductTypeTitle[type]
+            ? ProductTypeTitle[type]
+            : "Không xác định";
+
+
     // Giả sử đây là danh sách 13 sản phẩm (có thể là dữ liệu thật từ API)
-    const products = Array.from({ length: 13 }, (_, index) => ({
-        id: index + 1,
-        name: `Sản phẩm ${index + 1}`,
-    }));
-    const sortOptions = [
-        "Tên A → Z",
-        "Tên Z → A",
-        "Giá tăng dần",
-        "Giá giảm dần",
-        "Mới nhất"
+    // const products = Array.from({ length: 13 }, (_, index) => ({
+    //     id: index + 1,
+    //     name: `Sản phẩm ${index + 1}`,
+    // }));
+    const sortOptions: { label: string; field: string; order: "ascending" | "descending" }[] = [
+        { label: "Tên A → Z", field: "name", order: "ascending" },
+        { label: "Tên Z → A", field: "name", order: "descending" },
+        { label: "Giá tăng dần", field: "price", order: "ascending" },
+        { label: "Giá giảm dần", field: "price", order: "descending" },
+        { label: "Mới nhất", field: "createdAt", order: "descending" }
     ];
+
+    const {
+        records: products,
+        fetching,
+        sortField
+    } = useProduct<Product>(getAllProducts, {
+        type: typeParam || undefined,
+    });
+
+
 
     const colors = ["Trắng", "Đen", "Xám", "Xanh dương", "Đỏ"];
     const [showMore, setShowMore] = useState(false);
@@ -29,7 +64,7 @@ const Product = () => {
                     items={[
                         { label: "Trang chủ", href: "/" },
                         { label: "Sản phẩm", href: "/product" },
-                        { label: "Sản phẩm nổi bật" } // Không có href => là mục hiện tại
+                        { label: productTitle }
                     ]}
                 />
             </div>
@@ -38,7 +73,7 @@ const Product = () => {
                     <div className="flex items-center justify-between bg-white p-4">
                         {/* Tiêu đề */}
                         <h2 className="text-lg font-semibold text-[var(--color-primary)]">
-                            Tai nghe
+                            {productTitle}
                         </h2>
 
                         {/* Nút lọc */}
@@ -46,16 +81,17 @@ const Product = () => {
                             {sortOptions.map((option, index) => (
                                 <button
                                     key={index}
-                                    className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold  "
+                                    onClick={() => sortField({ value: option.field, order: option.order })}
+                                    className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
                                 >
-                                    {option}
+                                    {option.label}
                                 </button>
                             ))}
                         </div>
                     </div>
                     <div className="grid grid-cols-4 gap-2">
                         {products.map((product) => (
-                            <ProductCard />
+                            <ProductCardTmp key={JSON.stringify(product)} product={product} />
                         ))}
                     </div>
                 </div>
@@ -156,7 +192,7 @@ const Product = () => {
                 </div>
             </div>
 
-            <ListCollection/>
+            <ListCollection />
         </div>
     )
 }
