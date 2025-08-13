@@ -42,7 +42,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       name: "",
       price: 0,
       quantity: 0,
-      image: null,
+      imageDetails: [],
+      imageThumbnails: [],
       description: "",
     },
     resolver: zodResolver(ProductSchema),
@@ -86,7 +87,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      await addProduct(payloadAddProduct, data.image);
+
+
+      await addProduct(payloadAddProduct, data.imageDetails, data.imageThumbnails);
       onSuccess?.();
       reset();
       Promise.resolve().then(() => {
@@ -180,15 +183,30 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         />
 
         <Controller
-          name="image"
+          name="imageDetails"
           control={control}
           render={({ field }) => (
             <BaseUpload
-              id="image"
+              id="imageDetails"
               {...field}
               label="Hình ảnh"
-              error={errors.image?.message}
-              onChange={(file) => setValue("image", file)}
+              error={errors.imageDetails?.message}
+              multiple={true}
+              onChange={(files: File[]) => field.onChange(files)}
+            />
+          )}
+        />
+        <Controller
+          name="imageThumbnails"
+          control={control}
+          render={({ field }) => (
+            <BaseUpload
+              id="imageThumbnails"
+              {...field}
+              label="Hình ảnh"
+              error={errors.imageThumbnails?.message}
+              multiple={true}
+              onChange={(files: File[]) => field.onChange(files)}
             />
           )}
         />

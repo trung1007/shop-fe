@@ -63,7 +63,7 @@ const Product = () => {
     const colors = ["Trắng", "Đen", "Xám", "Xanh dương", "Đỏ"];
     const [showMore, setShowMore] = useState(false);
     return (
-        <div className="flex flex-col px-[64px] pb-[60px] pt-[20px] gap-6 bg-[var(--color-bg)]">
+        <div className="flex flex-col pb-[60px] pt-[20px] gap-6 bg-[var(--color-bg)]">
             <div>
                 <BreadCrumb
                     items={[
