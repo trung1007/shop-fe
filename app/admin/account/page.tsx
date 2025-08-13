@@ -20,8 +20,10 @@ const AdminAccountPage = () => {
         return;
       }
 
-      await logout(refreshToken);
-      console.log("Logging out with refresh token:", refreshToken);
+      if(refreshToken){
+        await logout(refreshToken);
+      }
+      // await logout(refreshToken);
       Cookies.remove("refresh_token");
       Cookies.remove("access_token");
       dispatch(logoutUser());
