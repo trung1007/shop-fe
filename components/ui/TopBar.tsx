@@ -27,7 +27,7 @@ const TopBar = () => {
 
 
   return (
-    <div className="bg-[var(--color-primary)] text-white text-sm py-2 px-40 flex items-center justify-between">
+    <div className="bg-[var(--color-primary)] text-white text-sm py-2 px-[64px] flex items-center justify-between">
       <div className="flex space-x-2 items-center">
         <div className="flex items-center bg-lime-200 text-emerald-900 rounded-full px-3 py-1 font-medium">
           <FaMapMarkerAlt className="mr-1" />
