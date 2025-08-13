@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   getUser,
   loginUser,
+  logout,
   registerUser,
   updateUser,
 } from "@/services/authService";
@@ -17,7 +18,9 @@ import {
   setAccessToken,
   setRefreshToken,
   User,
+  logoutUser,
 } from "@/stores/auth/authSlice";
+import { persistor } from "@/stores/store";
 
 export const useRegister = () => {
   return useMutation({
@@ -25,9 +28,7 @@ export const useRegister = () => {
   });
 };
 
-export const useAuthMutation = (
-  mutationFn: (data: any) => Promise<any>
-) =>  {
+export const useAuthMutation = (mutationFn: (data: any) => Promise<any>) => {
   const dispatch = useDispatch();
   return useMutation({
     mutationFn,
@@ -37,14 +38,13 @@ export const useAuthMutation = (
       Cookies.set("refresh_token", token?.refreshToken);
       dispatch(setAccessToken(token?.accessToken));
       dispatch(setRefreshToken(token?.refreshToken));
-
       dispatch(setUser(user));
     },
     onError: (error: any) => {
       console.error("Đăng nhập thất bại", error);
     },
   });
-}
+};
 
 export const useUpdate = () => {
   const dispatch = useDispatch();
@@ -61,3 +61,18 @@ export const useUpdate = () => {
   });
 };
 
+export const useLogout = () => {
+  const dispatch = useDispatch();
+  return useMutation({
+    mutationFn: (refreshToken: string) => logout(refreshToken),
+    onSuccess: async () => {
+      Cookies.remove("refresh_token");
+      Cookies.remove("access_token");
+      dispatch(logoutUser());
+      persistor.purge();
+    },
+    onError: (error: any) => {
+      console.error("Cập nhật thất bại", error.message);
+    },
+  });
+};

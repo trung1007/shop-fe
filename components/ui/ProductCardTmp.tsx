@@ -6,6 +6,14 @@ import { useEffect } from "react";
 import { formatPrice } from "@/utils";
 
 const ProductCardTmp = ({ product }: any) => {
+
+    useEffect(() => {
+        console.log("ProductS:", product);
+
+    }, [product])
+
+    const listImgBanner = product?.imgUrls || [];
+
     return (
         <div className="group relative w-full flex flex-col cursor-pointer ">
             <div className="product-card relative flex flex-col gap-2 px-4 py-3 bg-white  shadow-md hover:shadow-lg transition-shadow duration-300 w-full">
@@ -13,13 +21,13 @@ const ProductCardTmp = ({ product }: any) => {
                 <Link href={`/product/${product?.id}`}>
                     <div className="relative w-full aspect-square overflow-hidden">
                         <Image
-                            src={product?.imgUrl}
+                            src={listImgBanner[0]}
                             alt="Product"
                             fill
-                            className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+                            className="object-cover bg-contain transition-opacity duration-300 group-hover:opacity-0"
                         />
                         <Image
-                            src={productImg2}
+                            src={listImgBanner[1]}
                             alt="Product Hover"
                             fill
                             className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"

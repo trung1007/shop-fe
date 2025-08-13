@@ -3,13 +3,11 @@
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { logoutUser } from "@/stores/auth/authSlice";
 import Cookies from "js-cookie";
 import SideBarInfor from "@/components/ui/SideBarInfor";
 import { useForm } from "react-hook-form";
-import { useUpdate } from "@/hooks/useAuth";
+import { useLogout, useUpdate } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
-import { logout } from "@/services/authService";
 
 type FormValues = {
   name: string;
@@ -21,8 +19,8 @@ const UserInfoPage = () => {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { mutate, isPending } = useUpdate();
+  const { mutate: mutateLogout, isPending: isLogingout } = useLogout();
 
   const {
     register,
@@ -39,7 +37,7 @@ const UserInfoPage = () => {
   });
 
   useEffect(() => {
-    if (!user && !isLoggingOut) {
+    if (!user && !isLogingout) {
       router.push("/login");
     } else if (user) {
       reset({
@@ -48,28 +46,24 @@ const UserInfoPage = () => {
         email: user.email,
       });
     }
-  }, [user, isLoggingOut, reset, router]);
+  }, [user, isLogingout, reset, router]);
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    try {
-      const refreshToken = Cookies.get("refresh_token");
-      if (!refreshToken) {
-        console.error("No refresh token found");
-        return;
-      }
+  const handleLogout = () => {
+    const refreshToken = Cookies.get("refresh_token");
 
-      await logout(refreshToken);
-      console.log("Logging out with refresh token:", refreshToken);
-      Cookies.remove("refresh_token");
-      Cookies.remove("access_token");
-      dispatch(logoutUser());
-      setTimeout(() => router.push("/login"), 1000);
-    } catch (error) {
-      console.error("Error logging out:", error);
+    if (!refreshToken) {
+      console.error("No refresh token found");
+      return;
     }
+    mutateLogout(refreshToken, {
+      onSuccess: () => {
+        router.push("/login");
+      },
+      onError: (error: any) => {
+        console.error("Error logging out:", error);
+      },
+    });
   };
-
   const onSubmit = (data: FormValues) => {
     const updateUser = { id: Number(user?.id), ...data };
     mutate(updateUser, {
@@ -87,9 +81,9 @@ const UserInfoPage = () => {
       <SideBarInfor handleLogout={handleLogout} />
 
       <main className="flex-1 bg-white p-6 rounded shadow-sm">
-        {isLoggingOut || isPending ? (
+        {isLogingout || isPending ? (
           <div className="text-center text-lg font-medium text-gray-500 animate-pulse">
-            {isLoggingOut ? "Đang đăng xuất..." : "Đang cập nhật..."}
+            {isLogingout ? "Đang đăng xuất..." : "Đang cập nhật..."}
           </div>
         ) : (
           <>
@@ -129,11 +123,10 @@ const UserInfoPage = () => {
                 <button
                   type="submit"
                   disabled={!isDirty}
-                  className={`mt-6 px-4 py-2 rounded text-white transition-all ${
-                    isDirty
-                      ? "bg-black hover:bg-gray-800"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
+                  className={`mt-6 px-4 py-2 rounded text-white transition-all ${isDirty
+                    ? "bg-black hover:bg-gray-800"
+                    : "bg-gray-400 cursor-not-allowed"
+                    }`}
                 >
                   Lưu thông tin
                 </button>

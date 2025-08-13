@@ -1,36 +1,30 @@
 "use client";
 
-import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
-
+import { useAppSelector } from "@/hooks/reduxHooks";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { logout } from "@/services/authService";
-import { logoutUser } from "@/stores/auth/authSlice";
+import { useLogout } from "@/hooks/useAuth";
 
 const AdminAccountPage = () => {
   const user = useAppSelector((state) => state.auth.user);
-  const dispatch = useAppDispatch();
   const router = useRouter();
+  const { mutate } = useLogout();
 
-  const handleLogout = async () => {
-    try {
-      const refreshToken = Cookies.get("refresh_token");
-      if (!refreshToken) {
-        console.error("No refresh token found");
-        return;
-      }
+  const handleLogout = () => {
+    const refreshToken = Cookies.get("refresh_token");
 
-      if(refreshToken){
-        await logout(refreshToken);
-      }
-      // await logout(refreshToken);
-      Cookies.remove("refresh_token");
-      Cookies.remove("access_token");
-      dispatch(logoutUser());
-      router.push("/login");
-    } catch (error) {
-      console.error("Error logging out:", error);
+    if (!refreshToken) {
+      console.error("No refresh token found");
+      return;
     }
+    mutate(refreshToken, {
+      onSuccess: () => {
+        router.push("/login");
+      },
+      onError: (error: any) => {
+        console.error("Error logging out:", error);
+      },
+    });
   };
 
   return (

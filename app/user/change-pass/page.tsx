@@ -3,13 +3,11 @@
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { logoutUser } from "@/stores/auth/authSlice";
 import Cookies from "js-cookie";
 import SideBarInfor from "@/components/ui/SideBarInfor";
 import { useForm } from "react-hook-form";
-import { useUpdate } from "@/hooks/useAuth";
+import { useLogout, useUpdate } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
-import { logout } from "@/services/authService";
 
 type ChangePassForm = {
     current: string;
@@ -23,6 +21,7 @@ const ChangePassPage = () => {
     const router = useRouter();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const { mutate, isPending } = useUpdate();
+    const { mutate: mutateLogout } = useLogout();
 
     const {
         register,
@@ -49,23 +48,23 @@ const ChangePassPage = () => {
             });
         }
     }, [user, isLoggingOut, reset, router]);
-    const handleLogout = async () => {
-        try {
-            const refreshToken = Cookies.get("refresh_token");
-            if (!refreshToken) {
-                console.error("No refresh token found");
-                return;
-            }
+    
 
-            await logout(refreshToken);
-            console.log("Logging out with refresh token:", refreshToken);
-            Cookies.remove("refresh_token");
-            Cookies.remove("access_token");
-            dispatch(logoutUser());
-            router.push("/login");
-        } catch (error) {
-            console.error("Error logging out:", error);
+    const handleLogout = () => {
+        const refreshToken = Cookies.get("refresh_token");
+
+        if (!refreshToken) {
+            console.error("No refresh token found");
+            return;
         }
+        mutateLogout(refreshToken, {
+            onSuccess: () => {
+                router.push("/login");
+            },
+            onError: (error: any) => {
+                console.error("Error logging out:", error);
+            },
+        });
     };
 
     const onSubmit = (data: ChangePassForm) => {

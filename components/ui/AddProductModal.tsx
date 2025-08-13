@@ -203,7 +203,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             <BaseUpload
               id="imageThumbnails"
               {...field}
-              label="Hình ảnh"
+              label="Hình ảnh Banner"
               error={errors.imageThumbnails?.message}
               multiple={true}
               onChange={(files: File[]) => field.onChange(files)}

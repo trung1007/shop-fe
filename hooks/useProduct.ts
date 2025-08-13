@@ -35,7 +35,7 @@ interface FetchApiResponse<T> {
   };
 }
 
-function useProduct<T>(
+export default function useProduct<T>(
   fetchApi: (params: FetchApiParams) => Promise<FetchApiResponse<T>>,
   queryParams: Record<string, any> = {}
 ) {
@@ -158,4 +158,3 @@ function useProduct<T>(
   };
 }
 
-export default useProduct;
