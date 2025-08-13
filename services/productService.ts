@@ -10,15 +10,18 @@ export const getAllProducts = async (params: any) => {
   return response.data;
 };
 
-export const addProduct = async (product: any, fileImages: File[]) => {
+export const addProduct = async (product: any, imageDetails: File[], imageThumbnails: File[]) => {
   const formData = new FormData();
   formData.append(
     "product",
     new Blob([JSON.stringify(product)], { type: "application/json" })
   );
-  fileImages.forEach((file) => {
-    formData.append("fileImage", file);
-  }); 
+  imageDetails.forEach((file) => {
+    formData.append("imageDetails", file);
+  });
+  imageThumbnails.forEach((file) => {
+    formData.append("imageThumbnails", file);
+  });
   const response = await api.post("/product/add", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
