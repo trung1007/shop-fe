@@ -36,6 +36,7 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
+    <>
     <div className="w-full flex items-center justify-between px-[64px] py-2 bg-white shadow">
       {/* Logo */}
       <div className="flex items-center space-x-2">

@@ -83,7 +83,7 @@ function useProduct<T>(
       params.set("size", mergedParams.size.toString());
     }
 
-    router.replace(`${pathname}?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString().replace(/%2C/g, ',')}`);
   };
 
   const onParamsChange = (params: Partial<ServerParams>) => {

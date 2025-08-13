@@ -52,6 +52,11 @@ const Product = () => {
     } = useProduct<Product>(getAllProducts, {
         type: typeParam || undefined,
     });
+    // const {
+    //     records: products,
+    //     fetching,
+    //     sortField
+    // } = useCommonRepository<Product>(getAllProducts)
 
 
 
