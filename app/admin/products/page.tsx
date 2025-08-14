@@ -3,35 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button, Pagination } from "antd";
-import AddProductModal from "@/components/ui/AddProductModal";
+import AddProductModal from "@/components/modal/AddProductModal";
 
-// Fake 30 sản phẩm
-// const generateMockProducts = () => {
-//     const types = ["laptop", "phone", "headphone"];
-//     const names = ["ASUS ROG", "iPhone", "Sony", "Samsung", "Dell", "HP", "JBL"];
-//     return Array.from({ length: 30 }, (_, i) => ({
-//         id: i + 1,
-//         name: `${names[i % names.length]} #${i + 1}`,
-//         image: `https://via.placeholder.com/80x80.png?text=${encodeURIComponent(
-//             names[i % names.length]
-//         )}`,
-//         price: 1000000 + (i % 10) * 1000000,
-//         quantity: Math.floor(Math.random() * 20) + 1,
-//         type: types[i % types.length],
-//     }));
-// };
 
 const AdminProductPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [products, setProducts] = useState(generateMockProducts());
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const pageSize = 10;
-    // const currentProducts = products.slice(
-    //     (currentPage - 1) * pageSize,
-    //     currentPage * pageSize
-    // );
-
+ 
     return (
         <div className="p-6">
             <div className="flex items-center justify-between mb-6">

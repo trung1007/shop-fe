@@ -2,13 +2,15 @@ import z from "zod";
 
 export const CategorySchema = z.object({
   name: z.string().min(1, "Tên không được để trống"),
-  code: z.string().min(1, "Mã code không được để trống"),
-  img: z
-    .string()
-    .url("Ảnh phải là một URL hợp lệ")
-    .optional()
-    .or(z.literal("")),
-  description: z.string().optional().or(z.literal("")),
+  image: z.instanceof(File, { message: "Vui lòng chọn một ảnh" }),
+  description: z.string().min(1, "Vui lòng nhập mô tả"),
+});
+
+export const SubCategorySchema = z.object({
+  name: z.string().min(1, "Tên không được để trống"),
+  image: z.instanceof(File, { message: "Vui lòng chọn một ảnh" }),
+  categoryId: z.number().int().positive("Danh mục là bắt buộc"),
+  description: z.string().min(1, "Vui lòng nhập mô tả"),
 });
 
 export const ProductSchema = z.object({
@@ -17,8 +19,12 @@ export const ProductSchema = z.object({
   price: z.number().min(0, "Giá phải lớn hơn hoặc bằng 0"),
   quantity: z.number().int().min(0, "Số lượng phải lớn hơn hoặc bằng 0"),
   type: z.string().optional(),
-  imageDetails: z.array(z.instanceof(File)).nonempty("Vui lòng chọn ít nhất 1 ảnh"),
-  imageThumbnails: z.array(z.instanceof(File)).nonempty("Vui lòng chọn ít nhất 1 ảnh"),
+  imageDetails: z
+    .array(z.instanceof(File))
+    .nonempty("Vui lòng chọn ít nhất 1 ảnh"),
+  imageThumbnails: z
+    .array(z.instanceof(File))
+    .nonempty("Vui lòng chọn ít nhất 1 ảnh"),
   categoryId: z.number().int().positive("Danh mục là bắt buộc"), // thêm nếu cần
 });
 // export const ProductSchema = z.object({
@@ -32,4 +38,5 @@ export const ProductSchema = z.object({
 // });
 
 export type CategoryInput = z.infer<typeof CategorySchema>;
+export type SubCategoryInput = z.infer<typeof SubCategorySchema>;
 export type ProductInput = z.infer<typeof ProductSchema>;

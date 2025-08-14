@@ -9,6 +9,7 @@ interface BaseUploadProps {
   error?: string;
   defaultImages?: string[];
   multiple?: boolean;
+  resetTrigger?: any;
 }
 
 const BaseUpload: React.FC<BaseUploadProps> = ({
@@ -18,6 +19,7 @@ const BaseUpload: React.FC<BaseUploadProps> = ({
   error,
   defaultImages = [],
   multiple = false,
+  resetTrigger,
 }) => {
   const [previews, setPreviews] = useState<string[]>(defaultImages);
   const [files, setFiles] = useState<File[]>([]);
@@ -62,6 +64,12 @@ const BaseUpload: React.FC<BaseUploadProps> = ({
       });
     };
   }, [previews]);
+
+  useEffect(() => {
+    setPreviews([]);
+    setFiles([]);
+    onChange?.([]);
+  }, [resetTrigger]);
 
   return (
     <div className="w-full max-w-sm">
@@ -122,9 +130,7 @@ const BaseUpload: React.FC<BaseUploadProps> = ({
             </div>
           ))
         ) : (
-          <div
-            className="w-[120px] h-[120px] border border-dashed border-gray-300 rounded-md  bg-gray-50 flex justify-center items-center cursor-pointer"
-          >
+          <div className="w-[120px] h-[120px] border border-dashed border-gray-300 rounded-md  bg-gray-50 flex justify-center items-center cursor-pointer">
             <span className="text-sm text-gray-400 ">Chưa có ảnh</span>
           </div>
         )}
