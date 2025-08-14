@@ -29,3 +29,35 @@ export const addProduct = async (product: any, imageDetails: File[], imageThumbn
   });
   return response.data;
 };
+
+export const addCategory = async (product: any, image:File) => {
+  const formData = new FormData();
+  formData.append(
+    "category",
+    new Blob([JSON.stringify(product)], { type: "application/json" })
+  );
+  formData.append("image", image);
+
+  const response = await api.post("/category/save", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const addSubgCategory = async (product: any, image:File) => {
+  const formData = new FormData();
+  formData.append(
+    "subCategory",
+    new Blob([JSON.stringify(product)], { type: "application/json" })
+  );
+  formData.append("image", image);
+
+  const response = await api.post("/sub_category/add", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
