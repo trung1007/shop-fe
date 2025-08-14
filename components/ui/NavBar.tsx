@@ -26,54 +26,47 @@ const contactOptions: HoverDropdownOption[] = [
 ];
 
 const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
-  // const categoryOptions: HoverDropdownOption[] = [
-  //   { label: "Tất cả", value: "all" },
-  //   { label: "Công nghệ", value: "tech" },
-  //   { label: "Kinh doanh", value: "business" },
-  //   { label: "Sức khỏe", value: "health" },
-  //   { label: "Giáo dục", value: "education" },
-  // ];
 
   const [categories, setCategories] = useState<HoverDropdownOption[]>([]);
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const data = await getListCategories();
-          const mappedData: HoverDropdownOption[] = data.map((category: any) => ({
-            label: category.nameVi,
-            value: category.nameEn,
-            childrenOptions: category.subCategoryList.map((subCategory:any) => ({
-              label: subCategory.nameVi,
-              value: subCategory.nameEn
-            })) 
+    const fetchData = async () => {
+      try {
+        const data = await getListCategories();
+        const mappedData: HoverDropdownOption[] = data.map((category: any) => ({
+          label: category.nameVi,
+          value: category.nameEn,
+          childrenOptions: category.subCategoryList.map((subCategory: any) => ({
+            label: subCategory.nameVi,
+            value: subCategory.nameEn
           }))
+        }))
 
-          setCategories(mappedData);
-        } catch (error) {
-          console.error("Error fetching categories:", error);
-        }
-      };
-  
-      fetchData();
-    }, []);
+        setCategories(mappedData);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
     <>
-    <div className="w-full flex items-center justify-between px-[64px] py-2 bg-white shadow">
-      {/* Logo */}
-      <div className="flex items-center space-x-2">
-        <Link href="/" className="text-2xl font-bold text-gray-700">
-          <img
-            src="/images/logo-shop.png"
-            height={80}
-            width={100}
-            className="cursor-pointer"
-          />
-        </Link>
-        
-      </div>
+      <div className="w-full flex items-center justify-between px-[64px] py-2 bg-white shadow">
+        {/* Logo */}
+        <div className="flex items-center space-x-2">
+          <Link href="/" className="text-2xl font-bold text-gray-700">
+            <img
+              src="/images/logo-shop.png"
+              height={80}
+              width={100}
+              className="cursor-pointer"
+            />
+          </Link>
+
+        </div>
 
         {/* Nút Danh Mục */}
         <HoverDropdown

@@ -10,6 +10,11 @@ export const getAllProducts = async (params: any) => {
   return response.data;
 };
 
+export const getPopularSubCategories = async () => {
+  const response = await api.get("/sub_category/popular");
+  return response.data;
+};
+
 export const addProduct = async (product: any, imageDetails: File[], imageThumbnails: File[]) => {
   const formData = new FormData();
   formData.append(
@@ -30,7 +35,7 @@ export const addProduct = async (product: any, imageDetails: File[], imageThumbn
   return response.data;
 };
 
-export const addCategory = async (product: any, image:File) => {
+export const addCategory = async (product: any, image: File) => {
   const formData = new FormData();
   formData.append(
     "category",
@@ -46,7 +51,7 @@ export const addCategory = async (product: any, image:File) => {
   return response.data;
 };
 
-export const addSubgCategory = async (product: any, image:File) => {
+export const addSubCategory = async (product: any, image: File) => {
   const formData = new FormData();
   formData.append(
     "subCategory",

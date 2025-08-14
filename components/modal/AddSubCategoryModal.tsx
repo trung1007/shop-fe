@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   addCategory,
-  addSubgCategory,
+  addSubCategory,
   getListCategories,
 } from "@/services/productService";
 import {
@@ -77,7 +77,7 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
         description: data.description,
         rootCategoryId: data.categoryId,
       };
-      await addSubgCategory(payloadAddSubCategory, data.image);
+      await addSubCategory(payloadAddSubCategory, data.image);
       onSuccess?.();
       reset();
       setUploadResetKey((prev) => prev + 1);
