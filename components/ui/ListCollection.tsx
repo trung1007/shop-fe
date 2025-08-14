@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import CollectionCard from "./CollectionCard";
-import { getListCategories } from "@/services/productService";
+import { getPopularSubCategories } from "@/services/productService";
 
 const ListCollection = () => {
   const [categories, setCategories] = useState([]);
@@ -9,7 +9,7 @@ const ListCollection = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getListCategories();
+        const data = await getPopularSubCategories();
         setCategories(data);
       } catch (error) {
         console.error("Error fetching categories:", error);
