@@ -4,6 +4,7 @@ import ListCollection from "@/components/ui/ListCollection";
 import ProductCard from "@/components/ui/ProductCard"
 import ProductCardTmp from "@/components/ui/ProductCardTmp";
 import { ProductType, ProductTypeTitle } from "@/const/enum";
+import fetchListAPI from "@/hooks/fetchAPI";
 import useCommonRepository from "@/hooks/useCommonRepository";
 import useProduct from "@/hooks/useProduct";
 import useQueryClient from "@/hooks/useProduct";
@@ -49,17 +50,9 @@ const Product = () => {
         records: products,
         fetching,
         sortField
-    } = useProduct<Product>(getAllProducts, {
+    } = fetchListAPI<Product>(getAllProducts, {
         type: typeParam || undefined,
     });
-
-   
-    // const {
-    //     records: products,
-    //     fetching,
-    //     sortField
-    // } = useCommonRepository<Product>(getAllProducts)
-
 
 
     const colors = ["Trắng", "Đen", "Xám", "Xanh dương", "Đỏ"];
