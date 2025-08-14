@@ -4,10 +4,11 @@ import { FiMenu, FiSearch, FiPhone, FiShoppingCart } from "react-icons/fi";
 import { BsFillLightningChargeFill } from "react-icons/bs";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HoverDropdown, { HoverDropdownOption } from "../common/HoverDropdown";
 import Link from "next/link";
 import CartModal from "../modal/CartModal";
+import { getListCategories } from "@/services/productService";
 
 const contactOptions: HoverDropdownOption[] = [
   {
@@ -25,13 +26,36 @@ const contactOptions: HoverDropdownOption[] = [
 ];
 
 const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
-  const categoryOptions: HoverDropdownOption[] = [
-    { label: "Tất cả", value: "all" },
-    { label: "Công nghệ", value: "tech" },
-    { label: "Kinh doanh", value: "business" },
-    { label: "Sức khỏe", value: "health" },
-    { label: "Giáo dục", value: "education" },
-  ];
+  // const categoryOptions: HoverDropdownOption[] = [
+  //   { label: "Tất cả", value: "all" },
+  //   { label: "Công nghệ", value: "tech" },
+  //   { label: "Kinh doanh", value: "business" },
+  //   { label: "Sức khỏe", value: "health" },
+  //   { label: "Giáo dục", value: "education" },
+  // ];
+
+  const [categories, setCategories] = useState<HoverDropdownOption[]>([]);
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const data = await getListCategories();
+          const mappedData: HoverDropdownOption[] = data.map((category: any) => ({
+            label: category.nameVi,
+            value: category.nameEn,
+            childrenOptions: category.subCategoryList.map((subCategory:any) => ({
+              label: subCategory.nameVi,
+              value: subCategory.nameEn
+            })) 
+          }))
+
+          setCategories(mappedData);
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
+      };
+  
+      fetchData();
+    }, []);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -54,9 +78,10 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
         {/* Nút Danh Mục */}
         <HoverDropdown
           label="DANH MỤC"
-          options={categoryOptions}
+          options={categories}
           icon={FiMenu}
           style="flex items-center px-3 rounded-lg py-3 bg-emerald-500 hover:bg-emerald-600 text-white"
+          dropdownWidth="w-40"
         />
 
         {/* Thanh Tìm Kiếm */}

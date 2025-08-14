@@ -2,13 +2,19 @@ import Icon from "@ant-design/icons";
 import React from "react";
 import { IconType } from "react-icons";
 import Link from 'next/link';
-
+import { useState } from "react";
 
 export interface HoverDropdownOption {
   label: string;
   value: string;
   icon?: IconType;
   styleIcon?: string;
+  childrenOptions?: ChildrenDropDownOptions[]
+}
+
+interface ChildrenDropDownOptions {
+  label: string;
+  value: string;
 }
 
 interface HoverDropdownProps {
@@ -28,6 +34,9 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
   iconStyle,
   dropdownWidth
 }) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="relative group inline-block w-fit">
       <div className={`font-medium cursor-pointer ${style || ""}`}>
