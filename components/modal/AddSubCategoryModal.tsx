@@ -21,6 +21,7 @@ import BaseUpload from "../common/BaseUpload";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "@/stores/loadingSlice";
 import { useQuery } from "@tanstack/react-query";
+import BaseCheckBox from "../common/BaseCheckBox";
 
 interface AddCategoryModalProps {
   open: boolean;
@@ -44,6 +45,7 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
       description: "",
       categoryId: undefined,
       image: undefined,
+      isPopular: false,
     },
     resolver: zodResolver(SubCategorySchema),
   });
@@ -59,7 +61,7 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
     queryFn: async () => {
       const data = await getListCategories();
       return data.map((cat: any) => ({
-        label: cat.name,
+        label: cat.nameVi,
         value: cat.id,
       }));
     },
@@ -76,7 +78,9 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
         name: data.name,
         description: data.description,
         rootCategoryId: data.categoryId,
+        popular: data.isPopular,
       };
+      
       await addSubCategory(payloadAddSubCategory, data.image);
       onSuccess?.();
       reset();
@@ -100,6 +104,12 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
       onOk={handleSubmit(handleFormSubmit)}
       okText="Thêm"
       cancelText="Hủy"
+      okButtonProps={{
+        style: {
+          backgroundColor: "var(--color-primary)",
+          borderColor: "var(--color-primary)",
+        },
+      }}
     >
       <form className="flex flex-col gap-4 pt-2">
         <Controller
@@ -161,6 +171,18 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
               options={categoryOptions}
               isOpen={dropdownOpen}
               setIsOpen={setDropdownOpen}
+            />
+          )}
+        />
+        <Controller
+          name="isPopular"
+          control={control}
+          render={({ field }) => (
+            <BaseCheckBox
+              label="Danh mục phổ biến"
+              checked={!!field.value}
+              onChange={field.onChange}
+              checkedColor="var(--color-primary)"
             />
           )}
         />

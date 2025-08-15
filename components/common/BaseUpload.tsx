@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
 import { LoadingOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import BaseButton from "./BaseButton";
 
 interface BaseUploadProps {
   label?: string;
@@ -88,7 +89,7 @@ const BaseUpload: React.FC<BaseUploadProps> = ({
           className={`cursor-pointer rounded-md px-4 py-2 text-sm font-medium shadow-sm transition text-white ${
             loading
               ? "bg-gray-400 pointer-events-none opacity-60"
-              : "bg-blue-600 hover:bg-blue-700"
+              : "bg-[var(--color-primary)] hover:[var(--color-primary-hover)]"
           }`}
         >
           {loading ? "Đang tải..." : multiple ? "Chọn ảnh" : "Chọn ảnh"}

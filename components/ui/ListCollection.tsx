@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import CollectionCard from "./CollectionCard";
 import { getPopularSubCategories } from "@/services/productService";
 
+interface Collection {
+  imgUrl: string;
+  name: string;
+}
+
 const ListCollection = () => {
   const [categories, setCategories] = useState([]);
 
@@ -22,14 +27,14 @@ const ListCollection = () => {
   return (
     <div className="bg-[white] rounded-lg mt-[60px]">
       <div className="grid grid-cols-8 divide-x divide-y divide-gray-200">
-        {categories.map((item, index) => (
+        {categories.map((item: Collection, index) => (
           <div
             key={index}
             className={`
-        ${((index + 1) % 8 === 0) ? "border-r-0" : ""}
+        ${(index + 1) % 8 === 0 ? "border-r-0" : ""}
       `}
           >
-            <CollectionCard img={item?.img} name={item?.name} />
+            <CollectionCard img={item?.imgUrl} name={item?.name} />
           </div>
         ))}
       </div>

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAuthMutation } from "@/hooks/useAuth";
 import { loginUser } from "@/services/authService";
+import { Spin } from "antd";
 
 const LoginForm = () => {
   const {
@@ -15,7 +16,7 @@ const LoginForm = () => {
   } = useForm<LoginInput>();
 
   const router = useRouter();
-  const { mutate } = useAuthMutation(loginUser);
+  const { mutate, isPending  } = useAuthMutation(loginUser);
 
   const onSubmit = (data: LoginInput) => {
     mutate(data, {
@@ -66,10 +67,11 @@ const LoginForm = () => {
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isPending}
         className="bg-[#e60000] text-white font-bold py-3 rounded-full hover:bg-[#cc0000] transition-all"
       >
-        {isSubmitting ? "Đang xử lý..." : "Đăng nhập"}
+        {isPending && <Spin size="small" />}
+        {isPending ? "Đang xử lý..." : "Đăng nhập"}
       </button>
     </form>
   );

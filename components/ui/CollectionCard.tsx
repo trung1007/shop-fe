@@ -2,11 +2,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface Props {
-  img: string;
-  name: string;
+  img?: string;
+  name?: string;
 }
-
-const CollectionCard = ({ img, name }: Props) => {
+const CollectionCard =  ({ img = "", name = "" }: Props)=> {
 
   const router = useRouter()
 
