@@ -11,6 +11,7 @@ export const SubCategorySchema = z.object({
   image: z.instanceof(File, { message: "Vui lòng chọn một ảnh" }),
   categoryId: z.number().int().positive("Danh mục là bắt buộc"),
   description: z.string().min(1, "Vui lòng nhập mô tả"),
+  isPopular: z.boolean()
 });
 
 export const ProductSchema = z.object({

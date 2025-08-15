@@ -11,7 +11,7 @@ const BaseButton = React.forwardRef<HTMLButtonElement, BaseButtonProps>(
       <button
         ref={ref}
         className={clsx(
-          "h-[40px] bg-black text-white rounded-md hover:bg-opacity-90 transition-all disabled:opacity-50",
+          "p-4 h-[40px] bg-[var(--color-primary)] flex justify-center items-center text-white rounded-md cursor-pointer transition-colors duration-300 hover:bg-[var(--color-primary-hover)]",
           className
         )}
         {...rest}
