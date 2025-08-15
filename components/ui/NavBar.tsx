@@ -75,6 +75,7 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
           icon={FiMenu}
           style="flex items-center px-3 rounded-lg py-3 bg-emerald-500 hover:bg-emerald-600 text-white"
           dropdownWidth="w-40"
+          uppercase={true}
         />
 
         {/* Thanh Tìm Kiếm */}

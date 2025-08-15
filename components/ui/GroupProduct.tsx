@@ -25,7 +25,6 @@ const GroupProduct = ({ groupTitle, type }: any) => {
                 <div className="flex items-center gap-2 text-[var(--color-button)] cursor-pointer hover:text-[var(--color-primary)] transition-colors duration-300">
                     <Link href={{
                         pathname: "/product",
-                        query: { type: type },
                     }} className="leading-none">Xem thêm</Link>
                     <FaAngleRight className="text-base leading-none" />
                 </div>

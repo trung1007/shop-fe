@@ -4,6 +4,7 @@ import ListCollection from "@/components/ui/ListCollection";
 import ProductCard from "@/components/ui/ProductCard"
 import ProductCardTmp from "@/components/ui/ProductCardTmp";
 import { ProductType, ProductTypeTitle } from "@/const/enum";
+import { FilterOperator } from "@/constants/FilterOperator";
 import useCommonRepository from "@/hooks/useCommonRepository";
 import useProduct from "@/hooks/useProduct";
 import useQueryClient from "@/hooks/useProduct";
@@ -20,23 +21,27 @@ type Product = {
     // thêm field khác...
 };
 
+const FILTER_OPERATORS = {
+    "categoryId": FilterOperator.EQUALITY,
+    "subCategoryId": FilterOperator.EQUALITY
+}
+
 const Product = () => {
 
-    const searchParams = useSearchParams();
-    const typeParam = searchParams.get("type") as ProductType | null;
-    const type = typeParam?.toUpperCase() as keyof typeof ProductType;
+    // const searchParams = useSearchParams();
+    // const typeParam = searchParams.get("type") as ProductType | null;
+    // const type = typeParam?.toUpperCase() as keyof typeof ProductType;
 
-    const productTitle =
-        type && ProductTypeTitle[type]
-            ? ProductTypeTitle[type]
-            : "Không xác định";
+    const [filter, setFilter] = useState({
+        categoryId: null,
+        subCategoryId: null
+    })
 
+    // const productTitle =
+    //     type && ProductTypeTitle[type]
+    //         ? ProductTypeTitle[type]
+    //         : "Không xác định";
 
-    // Giả sử đây là danh sách 13 sản phẩm (có thể là dữ liệu thật từ API)
-    // const products = Array.from({ length: 13 }, (_, index) => ({
-    //     id: index + 1,
-    //     name: `Sản phẩm ${index + 1}`,
-    // }));
     const sortOptions: { label: string; field: string; order: "ascending" | "descending" }[] = [
         { label: "Tên A → Z", field: "name", order: "ascending" },
         { label: "Tên Z → A", field: "name", order: "descending" },
@@ -49,9 +54,7 @@ const Product = () => {
         records: products,
         fetching,
         sortField
-    } = useProduct<Product>(getAllProducts, {
-        type: typeParam || undefined,
-    });
+    } = useProduct<Product>(getAllProducts);
     // const {
     //     records: products,
     //     fetching,
@@ -69,7 +72,7 @@ const Product = () => {
                     items={[
                         { label: "Trang chủ", href: "/" },
                         { label: "Sản phẩm", href: "/product" },
-                        { label: productTitle }
+                        { label: '11111' }
                     ]}
                 />
             </div>
@@ -78,7 +81,8 @@ const Product = () => {
                     <div className="flex items-center justify-between bg-white p-4">
                         {/* Tiêu đề */}
                         <h2 className="text-lg font-semibold text-[var(--color-primary)]">
-                            {productTitle}
+                            {/* {productTitle} */}
+                            1111
                         </h2>
 
                         {/* Nút lọc */}
@@ -92,6 +96,12 @@ const Product = () => {
                                     {option.label}
                                 </button>
                             ))}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold">all</button>
+                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold">categoryId=6(cong nghe)</button>
+                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold">subCategoryId=6(laptop)</button>
+
                         </div>
                     </div>
                     <div className="grid grid-cols-4 gap-2">

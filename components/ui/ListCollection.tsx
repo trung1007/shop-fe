@@ -5,7 +5,7 @@ import { getPopularSubCategories } from "@/services/productService";
 
 interface Collection {
   imgUrl: string;
-  name: string;
+  nameVi: string;
 }
 
 const ListCollection = () => {
@@ -34,7 +34,7 @@ const ListCollection = () => {
         ${(index + 1) % 8 === 0 ? "border-r-0" : ""}
       `}
           >
-            <CollectionCard img={item?.imgUrl} name={item?.name} />
+            <CollectionCard img={item?.imgUrl} name={item?.nameVi} />
           </div>
         ))}
       </div>

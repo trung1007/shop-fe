@@ -24,6 +24,7 @@ interface HoverDropdownProps {
   icon?: IconType;
   iconStyle?: string;
   dropdownWidth?: string;
+  uppercase?: boolean
 }
 
 const HoverDropdown: React.FC<HoverDropdownProps> = ({
@@ -32,7 +33,8 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
   style,
   icon: Icon,
   iconStyle,
-  dropdownWidth
+  dropdownWidth,
+  uppercase
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +64,7 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
           {options.map((option, index) => (
             <button
               key={index}
-              className={`w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:text-white ${hoveredIndex === index ? "bg-emerald-500 text-white" : ""}`}
+              className={`w-full flex items-center ${uppercase ? "uppercase" : ""} px-4 py-2 text-sm text-gray-700 hover:text-white ${hoveredIndex === index ? "bg-emerald-500 text-white" : ""}`}
               onClick={() => {
                 const element = document.getElementById(option?.value);
                 if (element) {
@@ -86,12 +88,12 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
           options[hoveredIndex]?.childrenOptions &&
           options[hoveredIndex].childrenOptions!.length > 0 &&
           (
-            <div className="rounded-md grid grid-cols-4 w-200 full-shadow"
+            <div className="rounded-md grid grid-cols-4 gap-4 w-200 full-shadow px-[5%]"
             >
               {options[hoveredIndex].childrenOptions!.map((sub, i) => (
                 <div
                   key={i}
-                  className="text-emerald-600 cursor-pointer hover:underline"
+                  className={`text-emerald-600 cursor-pointer hover:underline ${uppercase ? "uppercase" : ""}`}
                 >
                   {sub.label}
                 </div>
