@@ -9,6 +9,7 @@ import useCommonRepository from "@/hooks/useCommonRepository";
 import useProduct from "@/hooks/useProduct";
 import useQueryClient from "@/hooks/useProduct";
 import { getAllProducts } from "@/services/productService";
+import { toSearchParam } from "@/utils/requestUtil";
 import { Divider } from "antd";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -29,12 +30,17 @@ const FILTER_OPERATORS = {
 const Product = () => {
 
     // const searchParams = useSearchParams();
+    // console.log("searchParams: ", searchParams.toString());
     // const typeParam = searchParams.get("type") as ProductType | null;
     // const type = typeParam?.toUpperCase() as keyof typeof ProductType;
 
     const [filter, setFilter] = useState({
-        categoryId: null,
-        subCategoryId: null
+        code: null,
+        category: {
+            option: null,
+            value: null,
+            label: null
+        },
     })
 
     // const productTitle =
@@ -53,14 +59,34 @@ const Product = () => {
     const {
         records: products,
         fetching,
-        sortField
-    } = useProduct<Product>(getAllProducts);
+        sortField,
+        serverParams,
+        fetchRecords
+    } = useProduct<Product>(getAllProducts, filter);
     // const {
     //     records: products,
     //     fetching,
     //     sortField
     // } = useCommonRepository<Product>(getAllProducts)
 
+    const onFilterChange = (fieldType: any, value: any) => {
+        const newFilter = {
+            ...filter,
+            [fieldType]: value
+        }
+        setFilter(newFilter);
+        serverParams.searchKey = toSearchParam(newFilter, FILTER_OPERATORS);
+    }
+
+    const onChangeCategory = (isSubCategory: boolean, value: any, label: string) => {
+        const option = isSubCategory ? "subCategoryId" : "categoryId";
+        const objValue = {
+            option: option,
+            value: value,
+            label: label
+        }
+        onFilterChange("category", objValue);
+    }
 
 
     const colors = ["Trắng", "Đen", "Xám", "Xanh dương", "Đỏ"];
@@ -98,9 +124,21 @@ const Product = () => {
                             ))}
                         </div>
                         <div className="flex items-center gap-2">
-                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold">all</button>
-                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold">categoryId=6(cong nghe)</button>
-                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold">subCategoryId=6(laptop)</button>
+                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
+                                onClick={() => onChangeCategory(false, null, "tất cả")}
+                            >
+                                all
+                            </button>
+                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
+                                onClick={() => onChangeCategory(false, 6, "công nghệ")}
+                            >
+                                categoryId=6(cong nghe)
+                            </button>
+                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
+                                onClick={() => onChangeCategory(true, 10, "laptop")}
+                            >
+                                subCategoryId=10(laptop)
+                            </button>
 
                         </div>
                     </div>
