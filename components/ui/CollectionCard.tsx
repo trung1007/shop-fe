@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 interface Props {
   img?: string;
   name?: string;
+  slug?: string;
   rootCategoryKey?: string;
 }
 const CollectionCard = ({
   img = "",
   name = "",
+  slug = "",
   rootCategoryKey = "all",
 }: Props) => {
   const router = useRouter();
@@ -17,7 +19,7 @@ const CollectionCard = ({
     <div
       className="flex flex-col items-center cursor-pointer p-4"
       onClick={() => {
-        router.push(`/products/${rootCategoryKey}/${name}`);
+        router.push(`/products/${rootCategoryKey}/${slug}`);
       }}
     >
       <div

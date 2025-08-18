@@ -6,7 +6,7 @@ import { FaAngleRight } from "react-icons/fa";
 import useCommonRepository from "@/hooks/useCommonRepository";
 import { getAllProducts } from "@/services/productService";
 
-const GroupProduct = ({ groupTitle, type }: any) => {
+const GroupProduct = ({ groupTitle, type, slug }: any) => {
 
     return (
         <div className="group-product flex flex-col gap-2 w-full px-[64px] mt-[60px]" id={type} >
@@ -14,7 +14,7 @@ const GroupProduct = ({ groupTitle, type }: any) => {
                 <h2 className="text-[24px] text-[var(--color-primary)] font-bold ">{groupTitle}</h2>
                 <div className="flex items-center gap-2 text-[var(--color-button)] cursor-pointer hover:text-[var(--color-primary)] transition-colors duration-300">
                     <Link href={{
-                        pathname: `/products/${type}`,
+                        pathname: `/products/${slug}`,
                     }} className="leading-none">Xem thêm</Link>
                     <FaAngleRight className="text-base leading-none" />
                 </div>

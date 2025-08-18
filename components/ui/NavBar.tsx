@@ -9,6 +9,9 @@ import HoverDropdown, { HoverDropdownOption } from "../common/HoverDropdown";
 import Link from "next/link";
 import CartModal from "../modal/CartModal";
 import { getListCategories } from "@/services/productService";
+import { useQuery } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "@/stores/loadingSlice";
 
 const contactOptions: HoverDropdownOption[] = [
   {
@@ -27,29 +30,33 @@ const contactOptions: HoverDropdownOption[] = [
 
 const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
 
-  const [categories, setCategories] = useState<HoverDropdownOption[]>([]);
+  const dispatch = useDispatch()
+
+  const { data: categories = [], isLoading, isError } = useQuery<HoverDropdownOption[]>({
+    queryKey: ["categories", "list"],
+    queryFn: async () => {
+      const data = await getListCategories();
+      const mappedData: HoverDropdownOption[] = data.map((category: any) => ({
+        label: category.name,
+        value: category.slug,
+        childrenOptions: category.subCategoryList.map((subCategory: any) => ({
+          label: subCategory.name,
+          value: subCategory.slug,
+        })),
+      }));
+      console.log("mappedData", mappedData);
+      
+      return mappedData;
+    },
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getListCategories();
-        const mappedData: HoverDropdownOption[] = data.map((category: any) => ({
-          label: category.name,
-          value: category.slug,
-          childrenOptions: category.subCategoryList.map((subCategory: any) => ({
-            label: subCategory.name,
-            value: subCategory.slug
-          }))
-        }))
-
-        setCategories(mappedData);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+    if (isLoading) {
+      dispatch(showLoading());
+    } else {
+      dispatch(hideLoading());
+    }
+  }, [isLoading, dispatch]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (

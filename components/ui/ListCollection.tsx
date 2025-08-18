@@ -3,20 +3,26 @@ import { useEffect, useState } from "react";
 import CollectionCard from "./CollectionCard";
 import { getPopularSubCategories } from "@/services/productService";
 import { useQuery } from "@tanstack/react-query";
+import { hideLoading, showLoading } from "@/stores/loadingSlice";
+import { useDispatch } from "react-redux";
 
 interface Collection {
   imgUrl: string;
   name: string;
-  rootCategoryKey:string
+  slug: string;
+  rootCategoryKey: string
 }
 
 const ListCollection = () => {
+
+  const dispatch = useDispatch()
+
   const {
     data: subCategories = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["categories"],
+    queryKey: ["categories", "popular-sub"],
     queryFn: async () => {
       const data = await getPopularSubCategories();
       console.log("subCategory", data);
@@ -24,10 +30,19 @@ const ListCollection = () => {
       return data.map((cat: any) => ({
         imgUrl: cat.imgUrl,
         name: cat.subCategoryInfo.name,
+        slug: cat.subCategoryInfo.slug,
         rootCategoryKey: cat.categoryName
       }));
     },
   });
+
+  useEffect(() => {
+    if (isLoading) {
+      dispatch(showLoading());
+    } else {
+      dispatch(hideLoading());
+    }
+  }, [isLoading, dispatch]);
 
   return (
     <div className="bg-[white] rounded-lg mt-[60px]">
@@ -37,7 +52,7 @@ const ListCollection = () => {
             key={index}
             className={`${(index + 1) % 8 === 0 ? "border-r-0" : ""}`}
           >
-            <CollectionCard img={item?.imgUrl} name={item?.name} rootCategoryKey={item?.rootCategoryKey}  />
+            <CollectionCard img={item?.imgUrl} name={item?.name} slug={item?.slug} rootCategoryKey={item?.rootCategoryKey} />
           </div>
         ))}
       </div>
