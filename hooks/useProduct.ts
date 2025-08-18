@@ -136,7 +136,7 @@ function useProduct<T>(
         filterObj[key] = value;
       }
     }
-    updateRouter();
+    // updateRouter();
   }, []);
 
   // fetch data với React Query
