@@ -38,22 +38,20 @@ interface FetchApiResponse<T> {
 
 function useProduct<T>(
   fetchApi: (params: FetchApiParams) => Promise<FetchApiResponse<T>>,
-  filterObj: Record<string, any> = {}
+  filterObj: Record<string, any> = {},
+  searchParam: string = "",
 ) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
 
-  console.log("searchParam: ", searchParams)
-  console.log("queryParams: ", filterObj);
-
   const [serverParams, setServerParams] = useState<ServerParams>({
     sortAscending: false,
     sortField: "id",
     page: DEFAULT_PAGE,
     size: DEFAULT_PAGE_SIZE,
-    searchKey: "",
+    searchKey: searchParam,
   });
 
   // Cập nhật URL khi params thay đổi
@@ -67,9 +65,9 @@ function useProduct<T>(
       if (value === null || value === undefined) return;
       if (typeof value === "string" && value.trim() === "") return;
       if (typeof value === "number" && isNaN(value)) return;
-      if (typeof value === "object" && value.label != null) {
-        params.set(key, value.label);
-      }
+      // if (typeof value === "object" && value.label != null) {
+      //   params.set(key, value.);
+      // }
       params.set(key, value.toString());
     });
 
@@ -115,8 +113,6 @@ function useProduct<T>(
     const page = searchParams.get("page");
     const size = searchParams.get("size");
     const sort = searchParams.get("sort");
-
-    console.log("size: ", size);
 
     if (page) onParamsChange({ page: Number(page) });
     if (size) onParamsChange({ size: Number(size) });
