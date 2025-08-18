@@ -64,7 +64,6 @@ const Product = () => {
             value: paths.at(paths.length - 1)?.toString(),
         },
     })
-    console.log(filter)
 
     const sortOptions: { label: string; field: string; order: "ascending" | "descending" }[] = [
         { label: "Tên A → Z", field: "name", order: "ascending" },
@@ -75,7 +74,6 @@ const Product = () => {
     ];
 
     const searchKey = toSearchParam(filter, FILTER_OPERATORS); 
-    console.log("searchKey: ", searchKey)
 
     const {
         records: products,

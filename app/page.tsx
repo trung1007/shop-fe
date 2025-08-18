@@ -13,7 +13,7 @@ export default function Home() {
       </div>
       <GroupProduct groupTitle="Tất cả sản phẩm" type="all" />
 
-      <GroupProduct groupTitle="Gợi ý hôm nay" />
+      <GroupProduct groupTitle="Đồ công nghệ" type="tech" />
       <GroupProduct groupTitle="Sản phẩm bán chạy" />
       <GroupProduct groupTitle="Siêu giảm giá" />
       <GroupProduct groupTitle="Gợi ý hôm nay" />
