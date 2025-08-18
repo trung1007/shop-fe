@@ -33,11 +33,11 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
       try {
         const data = await getListCategories();
         const mappedData: HoverDropdownOption[] = data.map((category: any) => ({
-          label: category.nameVi,
-          value: category.nameEn,
+          label: category.name,
+          value: category.slug,
           childrenOptions: category.subCategoryList.map((subCategory: any) => ({
-            label: subCategory.nameVi,
-            value: subCategory.nameEn
+            label: subCategory.name,
+            value: subCategory.slug
           }))
         }))
 

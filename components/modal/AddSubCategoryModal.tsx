@@ -61,7 +61,7 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
     queryFn: async () => {
       const data = await getListCategories();
       return data.map((cat: any) => ({
-        label: cat.nameVi,
+        label: cat.name,
         value: cat.id,
       }));
     },

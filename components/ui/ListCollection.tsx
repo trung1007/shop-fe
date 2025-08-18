@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 interface Collection {
   imgUrl: string;
-  nameVi: string;
+  name: string;
   rootCategoryKey:string
 }
 
@@ -23,7 +23,7 @@ const ListCollection = () => {
 
       return data.map((cat: any) => ({
         imgUrl: cat.imgUrl,
-        nameVi: cat.subCategoryInfo.nameVi,
+        name: cat.subCategoryInfo.name,
         rootCategoryKey: cat.categoryName
       }));
     },
@@ -37,7 +37,7 @@ const ListCollection = () => {
             key={index}
             className={`${(index + 1) % 8 === 0 ? "border-r-0" : ""}`}
           >
-            <CollectionCard img={item?.imgUrl} name={item?.nameVi} rootCategoryKey={item?.rootCategoryKey}  />
+            <CollectionCard img={item?.imgUrl} name={item?.name} rootCategoryKey={item?.rootCategoryKey}  />
           </div>
         ))}
       </div>
