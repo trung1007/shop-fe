@@ -52,10 +52,6 @@ const Product = () => {
 
     const ProductCategoryTitle = breadcrumbDefault.at(breadcrumbDefault.length - 1)
 
-    console.log(ProductCategoryTitle);
-    
-
-
     const optionQueryCategory = paths.length === 2 ? "subCategory" : "category";
 
     const [filter, setFilter] = useState({
@@ -84,6 +80,11 @@ const Product = () => {
         fetchRecords
     } = useProduct<Product>(getAllProducts, filter, searchKey);
 
+
+    useEffect(()=>{
+        console.log("products", products);
+        
+    },[products])
     // const {
     //     records: products,
     //     fetching,

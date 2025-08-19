@@ -150,6 +150,7 @@ function useProduct<T>(
         dispatch(hideLoading());
       }
     },
+    refetchOnWindowFocus: false,
     placeholderData: (prevData) => prevData,
   });
 

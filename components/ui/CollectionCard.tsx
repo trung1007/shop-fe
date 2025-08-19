@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import defaultLogo from "@/assets/images/logo-shop.png"; // import ảnh logo
 
 interface Props {
   img?: string;
@@ -27,8 +28,8 @@ const CollectionCard = ({
              transition-transform hover:scale-110 relative"
       >
         <Image
-          src={img}
-          alt={name}
+          src={img || defaultLogo} // fallback về logo nếu img rỗng
+          alt={name || "Logo"}
           fill
           sizes="80px"
           className="object-contain w-auto h-auto"

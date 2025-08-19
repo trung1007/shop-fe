@@ -34,6 +34,7 @@ const ListCollection = () => {
         rootCategoryKey: cat.categoryName
       }));
     },
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {

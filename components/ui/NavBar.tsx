@@ -48,6 +48,7 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
       
       return mappedData;
     },
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {

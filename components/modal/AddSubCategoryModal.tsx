@@ -65,6 +65,7 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
         value: cat.id,
       }));
     },
+    refetchOnWindowFocus: false,
   });
 
   const [dropdownOpen, setDropdownOpen] = useState(false);

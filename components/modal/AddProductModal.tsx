@@ -50,6 +50,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const { data, isLoading, isError } = useQuery({
     queryKey: ["subCategories"],
     queryFn: getListSubCategories,
+    refetchOnWindowFocus: false,
   });
 
   const categoryOptions =
