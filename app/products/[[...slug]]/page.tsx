@@ -3,7 +3,7 @@ import BreadCrumb from "@/components/common/BreadCrumb";
 import ListCollection from "@/components/ui/ListCollection";
 import ProductCard from "@/components/ui/ProductCard"
 import ProductCardTmp from "@/components/ui/ProductCardTmp";
-import { ProductType, ProductTypeTitle } from "@/const/enum";
+import { ProductCategory} from "@/const/enum";
 import { FilterOperator } from "@/constants/FilterOperator";
 import useCommonRepository from "@/hooks/useCommonRepository";
 import useProduct from "@/hooks/useProduct";
@@ -11,9 +11,11 @@ import useQueryClient from "@/hooks/useProduct";
 import { getAllProducts } from "@/services/productService";
 import { toSearchParam } from "@/utils/requestUtil";
 import { Divider } from "antd";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
+import Link from 'next/link';
+
 
 type Product = {
     id: number;
@@ -23,30 +25,46 @@ type Product = {
 };
 
 const FILTER_OPERATORS = {
-    "categoryId": FilterOperator.EQUALITY,
-    "subCategoryId": FilterOperator.EQUALITY
+    "category": FilterOperator.EQUALITY,
+    "subCategory": FilterOperator.EQUALITY
 }
 
-const Product = () => {
+const PRODUCT_LIST_PATH = "/products";
 
-    // const searchParams = useSearchParams();
-    // console.log("searchParams: ", searchParams.toString());
-    // const typeParam = searchParams.get("type") as ProductType | null;
-    // const type = typeParam?.toUpperCase() as keyof typeof ProductType;
+const Product = () => {
+    const pathName = usePathname();
+    let breadcrumbDefault = [{ label: "Trang chủ", href: "/" }]
+
+    const paths = pathName.replace(PRODUCT_LIST_PATH, "").split("/").filter(Boolean);
+    //need handle paths has more than 2
+    if (paths.length === 0) {
+        breadcrumbDefault.push({ label: "Tất cả sản phẩm", href: "/products" })
+    } else {
+        let breadcrumbPath = "/products";
+        paths.forEach(path => {
+            breadcrumbPath += `/${path}`
+            breadcrumbDefault.push({
+                label: ProductCategory[path],
+                href: breadcrumbPath
+            })
+        })
+    }
+
+    const ProductCategoryTitle = breadcrumbDefault.at(breadcrumbDefault.length - 1)
+
+    console.log(ProductCategoryTitle);
+    
+
+
+    const optionQueryCategory = paths.length === 2 ? "subCategory" : "category";
 
     const [filter, setFilter] = useState({
         code: null,
         category: {
-            option: null,
-            value: null,
-            label: null
+            option: optionQueryCategory,
+            value: paths.at(paths.length - 1)?.toString(),
         },
     })
-
-    // const productTitle =
-    //     type && ProductTypeTitle[type]
-    //         ? ProductTypeTitle[type]
-    //         : "Không xác định";
 
     const sortOptions: { label: string; field: string; order: "ascending" | "descending" }[] = [
         { label: "Tên A → Z", field: "name", order: "ascending" },
@@ -56,13 +74,16 @@ const Product = () => {
         { label: "Mới nhất", field: "createdAt", order: "descending" }
     ];
 
+    const searchKey = toSearchParam(filter, FILTER_OPERATORS);
+
     const {
         records: products,
         fetching,
         sortField,
         serverParams,
         fetchRecords
-    } = useProduct<Product>(getAllProducts, filter);
+    } = useProduct<Product>(getAllProducts, filter, searchKey);
+
     // const {
     //     records: products,
     //     fetching,
@@ -78,16 +99,6 @@ const Product = () => {
         serverParams.searchKey = toSearchParam(newFilter, FILTER_OPERATORS);
     }
 
-    const onChangeCategory = (isSubCategory: boolean, value: any, label: string) => {
-        const option = isSubCategory ? "subCategoryId" : "categoryId";
-        const objValue = {
-            option: option,
-            value: value,
-            label: label
-        }
-        onFilterChange("category", objValue);
-    }
-
 
     const colors = ["Trắng", "Đen", "Xám", "Xanh dương", "Đỏ"];
     const [showMore, setShowMore] = useState(false);
@@ -95,11 +106,7 @@ const Product = () => {
         <div className="flex flex-col pb-[60px] pt-[20px] gap-6 bg-[var(--color-bg)]">
             <div>
                 <BreadCrumb
-                    items={[
-                        { label: "Trang chủ", href: "/" },
-                        { label: "Sản phẩm", href: "/product" },
-                        { label: '11111' }
-                    ]}
+                    items={breadcrumbDefault}
                 />
             </div>
             <div className="grid grid-cols-4 gap-5">
@@ -107,8 +114,7 @@ const Product = () => {
                     <div className="flex items-center justify-between bg-white p-4">
                         {/* Tiêu đề */}
                         <h2 className="text-lg font-semibold text-[var(--color-primary)]">
-                            {/* {productTitle} */}
-                            1111
+                            {ProductCategoryTitle?.label}
                         </h2>
 
                         {/* Nút lọc */}
@@ -124,21 +130,28 @@ const Product = () => {
                             ))}
                         </div>
                         <div className="flex items-center gap-2">
-                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
-                                onClick={() => onChangeCategory(false, null, "tất cả")}
-                            >
-                                all
-                            </button>
-                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
-                                onClick={() => onChangeCategory(false, 6, "công nghệ")}
-                            >
-                                categoryId=6(cong nghe)
-                            </button>
-                            <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
-                                onClick={() => onChangeCategory(true, 10, "laptop")}
-                            >
-                                subCategoryId=10(laptop)
-                            </button>
+                            <Link href="/products">
+                                <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
+                                >
+                                    all
+                                </button>
+                            </Link>
+
+                            <Link href={"/products/tech"}>
+                                <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
+
+                                >
+                                    categoryId=6(cong nghe)
+                                </button>
+                            </Link>
+
+                            <Link href={"/products/tech/laptop"}>
+                                <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
+                                >
+                                    subCategoryId=10(laptop)
+                                </button>
+                            </Link>
+
 
                         </div>
                     </div>

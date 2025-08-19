@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "@/stores/loadingSlice";
+import { log } from "console";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
@@ -37,7 +38,8 @@ interface FetchApiResponse<T> {
 
 function useProduct<T>(
   fetchApi: (params: FetchApiParams) => Promise<FetchApiResponse<T>>,
-  queryParams: Record<string, any> = {}
+  filterObj: Record<string, any> = {},
+  searchParam: string = "",
 ) {
   const router = useRouter();
   const pathname = usePathname();
@@ -49,49 +51,50 @@ function useProduct<T>(
     sortField: "id",
     page: DEFAULT_PAGE,
     size: DEFAULT_PAGE_SIZE,
-    searchKey: "",
+    searchKey: searchParam,
   });
 
   // Cập nhật URL khi params thay đổi
-  const updateRouter = (customParams?: Partial<ServerParams>) => {
+  const updateRouter = () => {
     const params = new URLSearchParams();
 
+    console.log("filterObj: ", filterObj);
+
     // custom query params
-    Object.entries(queryParams).forEach(([key, value]) => {
+    Object.entries(filterObj).forEach(([key, value]) => {
       if (value === null || value === undefined) return;
       if (typeof value === "string" && value.trim() === "") return;
       if (typeof value === "number" && isNaN(value)) return;
+      // if (typeof value === "object" && value.label != null) {
+      //   params.set(key, value.);
+      // }
       params.set(key, value.toString());
     });
 
-    const mergedParams = { ...serverParams, ...customParams };
+    // const mergedParams = { ...serverParams, ...customParams };
 
-    if (mergedParams.sortField !== "id" || mergedParams.sortAscending) {
+    if (serverParams.sortField !== "id" || serverParams.sortAscending) {
       params.set(
         "sort",
-        `${mergedParams.sortField},${
-          mergedParams.sortAscending ? "ASC" : "DESC"
+        `${serverParams.sortField},${serverParams.sortAscending ? "ASC" : "DESC"
         }`
       );
     }
 
-    if (mergedParams.page !== DEFAULT_PAGE) {
-      params.set("page", mergedParams.page.toString());
+    if (serverParams.page !== DEFAULT_PAGE) {
+      params.set("page", serverParams.page.toString());
     }
 
-    if (mergedParams.size !== DEFAULT_PAGE_SIZE) {
-      params.set("size", mergedParams.size.toString());
+    if (serverParams.size !== DEFAULT_PAGE_SIZE) {
+      params.set("size", serverParams.size.toString());
     }
 
     router.replace(`${pathname}?${params.toString().replace(/%2C/g, ',')}`);
   };
 
   const onParamsChange = (params: Partial<ServerParams>) => {
-    setServerParams((prev) => {
-      const updated = { ...prev, ...params };
-      updateRouter(updated);
-      return updated;
-    });
+    // updateRouter();
+    setServerParams((prev) => ({ ...prev, ...params }));
   };
 
   const sortField = (field: {
@@ -106,6 +109,7 @@ function useProduct<T>(
 
   // Đồng bộ từ URL -> state lần đầu
   useMemo(() => {
+    // console.log()
     const page = searchParams.get("page");
     const size = searchParams.get("size");
     const sort = searchParams.get("sort");
@@ -120,16 +124,19 @@ function useProduct<T>(
         sortAscending: sortDir === "ASC",
       });
     }
-
+    // console.log("searchParams: ", searchParams);
     for (const [key, value] of searchParams.entries()) {
-      if (key in queryParams) {
-        queryParams[key] = value;
+      console.log("key: ", key);
+      if (key in filterObj) {
+        console.log("value: ", value);
+        filterObj[key] = value;
       }
     }
+    // updateRouter();
   }, []);
 
   // fetch data với React Query
-  const queryKey = ["records", serverParams, queryParams];
+  const queryKey = ["records", serverParams];
   const { data, isFetching, refetch } = useQuery<ApiResponse<T>>({
     queryKey,
     queryFn: async () => {
@@ -138,7 +145,6 @@ function useProduct<T>(
         return await fetchApi({
           ...serverParams,
           page: serverParams.page - 1,
-          ...queryParams,
         });
       } finally {
         dispatch(hideLoading());

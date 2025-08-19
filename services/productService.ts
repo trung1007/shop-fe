@@ -5,6 +5,11 @@ export const getListCategories = async () => {
   return response.data;
 };
 
+export const getListSubCategories = async () => {
+  const response = await api.get("/sub_category/all");
+  return response.data;
+};
+
 export const getAllProducts = async (params: any) => {
   const response = await api.get("/product/all", { params });
   return response.data;
