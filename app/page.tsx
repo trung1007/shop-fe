@@ -12,7 +12,7 @@ export default function Home() {
       </div>
       <GroupProduct groupTitle="Tất cả sản phẩm" type="all" slug="" />
 
-      <GroupProduct groupTitle="Đồ công nghệ" type="cong-nghe" />
+      <GroupProduct groupTitle="Đồ công nghệ" type="cong-nghe" slug="cong-nghe" />
       <GroupProduct groupTitle="Sản phẩm bán chạy"  />
       <GroupProduct groupTitle="Siêu giảm giá" />
       <GroupProduct groupTitle="Gợi ý hôm nay" />
