@@ -7,7 +7,8 @@ import {
   FaUsers,
   FaCog,
   FaShoppingCart,
-  FaArchive, 
+  FaArchive,
+  FaDiceD6, 
 } from "react-icons/fa";
 
 interface SidebarProps {
@@ -21,6 +22,7 @@ const AdminSideBar = ({ isOpen }: SidebarProps) => {
     { name: "Dashboard", path: "/admin", icon: <FaTachometerAlt /> },
     { name: "Users", path: "/admin/users", icon: <FaUsers /> },
     { name: "Danh sách danh mục", path: "/admin/category", icon: <FaArchive /> },
+    { name: "Danh sách danh mục con", path: "/admin/subcategory", icon: <FaDiceD6 /> },
     {
       name: "Danh sách sản phẩm",
       path: "/admin/products",

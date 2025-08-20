@@ -15,3 +15,8 @@ export const NULL_VALUE = '__NULL__'
 export const NOT_NULL_VALUE = '__NOT_NULL__'
 export const EMPTY_VALUE = '__EMPTY__'
 export const NOT_EMPTY_VALUE = '__NOT_EMPTY__'
+
+
+export const FilterOperatorField = {
+  NAME: 'name'
+}

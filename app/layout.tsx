@@ -1,11 +1,10 @@
 
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import "@/styles/global.css";
 import Providers from "@/providers";
 import RedirectByRole from "@/components/RedirectByRole";
 import Loading from "@/components/common/Loading";
 import ClientHeader from "@/components/layout/ClientHeader";
+import ClientFooter from "@/components/layout/ClientFooter";
 
 
 export const metadata = {
@@ -30,7 +29,7 @@ export default function RootLayout({
           <Loading />
           <ClientHeader />
           {children}
-          <Footer />
+          <ClientFooter />
         </Providers>
       </body>
     </html>

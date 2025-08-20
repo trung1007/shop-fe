@@ -1,43 +1,48 @@
 "use client";
+
 import BaseButton from "@/components/common/BaseButton";
-import AddCategoryModal from "@/components/modal/AddCategoryModal";
 import AddSubCategoryModal from "@/components/modal/AddSubCategoryModal";
 import useProduct from "@/hooks/useProduct";
-import { getListCategories } from "@/services/productService";
-import { Button, Pagination } from "antd";
+import { getListSubCategories } from "@/services/productService";
+import { Pagination } from "antd";
 import { useEffect, useState } from "react";
 
-type Category = {
+type SubCategory = {
   id: number;
+  categoryName: string;
+  imgUrl: string;
+  subCategoryInfo: subInfo;
+};
+
+type subInfo = {
   name: string;
-  img: string;
   description: string;
 };
 
-const CategoryAdminPage = () => {
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+const SubCategoryAdminPage = () => {
+  const [isSubCategoryOpen, setIsSubCategoryOpen] = useState(false);
 
   const {
-    records: categories,
+    records: subcategories,
     totalRecords,
     fetching,
     sortField,
     serverParams,
     fetchRecords,
     onParamsChange,
-  } = useProduct<Category>(getListCategories,);
+  } = useProduct<SubCategory>(getListSubCategories);
 
   useEffect(() => {
-    console.log("categories", categories);
-  }, [categories]);
+    console.log("subcategories", subcategories);
+  }, [subcategories]);
 
   return (
     <div className="p-6 flex flex-col">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Danh sách Danh mục</h1>
+        <h1 className="text-2xl font-bold">Danh sách Danh mục con</h1>
         <div className="flex flex-wrap gap-3">
-          <BaseButton onClick={() => setIsCategoryOpen(true)}>
-            Thêm danh mục cha
+          <BaseButton onClick={() => setIsSubCategoryOpen(true)}>
+            Thêm danh mục con
           </BaseButton>
         </div>
       </div>
@@ -57,21 +62,29 @@ const CategoryAdminPage = () => {
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
                 Mô tả
               </th>
+              <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                Danh mục cha
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {categories?.map((category: Category, index: number) => (
-              <tr key={category.id}>
+            {subcategories?.map((subcategory: SubCategory, index: number) => (
+              <tr key={subcategory.id}>
                 <td className="px-4 py-2 text-sm">
-                  {" "}
                   {(serverParams.page - 1) * serverParams.size + (index + 1)}
                 </td>
-                <td className="px-4 py-2 text-sm">{category.name}</td>
+
+                {/* Tên danh mục */}
+                <td className="px-4 py-2 text-sm">
+                  {subcategory.subCategoryInfo?.name ?? "—"}
+                </td>
+
+                {/* Ảnh */}
                 <td className="px-4 py-2">
-                  {category.img != null ? (
+                  {subcategory.imgUrl ? (
                     <img
-                      src={category.img}
-                      alt={category.name}
+                      src={subcategory.imgUrl}
+                      alt={subcategory.subCategoryInfo?.description ?? "No description"}
                       className="h-20 w-20 object-cover rounded"
                     />
                   ) : (
@@ -80,8 +93,13 @@ const CategoryAdminPage = () => {
                     </div>
                   )}
                 </td>
+
+                {/* Mô tả */}
                 <td className="px-4 py-2 text-sm">
-                  {category.description ?? "-"}
+                  {subcategory.subCategoryInfo?.description ?? "—"}
+                </td>
+                 <td className="px-4 py-2 text-sm">
+                  {subcategory.categoryName ?? "—"}
                 </td>
               </tr>
             ))}
@@ -97,10 +115,10 @@ const CategoryAdminPage = () => {
           showSizeChanger={false}
         />
       </div>
-      {isCategoryOpen && (
-        <AddCategoryModal
-          open={isCategoryOpen}
-          onClose={() => setIsCategoryOpen(false)}
+      {isSubCategoryOpen && (
+        <AddSubCategoryModal
+          open={isSubCategoryOpen}
+          onClose={() => setIsSubCategoryOpen(false)}
           // onSubmit={handleAddProduct}
         />
       )}
@@ -108,4 +126,4 @@ const CategoryAdminPage = () => {
   );
 };
 
-export default CategoryAdminPage;
+export default SubCategoryAdminPage;

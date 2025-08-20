@@ -8,7 +8,7 @@ import { hideLoading, showLoading } from "@/stores/loadingSlice";
 import { log } from "console";
 
 const DEFAULT_PAGE = 1;
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 5;
 
 export type ApiResponse<T> = {
   data: T[];
