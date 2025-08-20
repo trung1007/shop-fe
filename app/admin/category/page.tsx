@@ -30,11 +30,7 @@ const CategoryAdminPage = () => {
     serverParams,
     fetchRecords,
     onParamsChange,
-  } = useProduct<Category>(getListCategories);
-
-  useEffect(() => {
-    console.log("categories", categories);
-  }, [categories]);
+  } = useProduct<Category>(getListCategories,"getListCategories");
 
   const handleSearch = useCallback(
     debounce((value: string) => {

@@ -43,7 +43,7 @@ const AdminProductPage = () => {
     serverParams,
     fetchRecords,
     onParamsChange,
-  } = useProduct<Product>(getAllProducts);
+  } = useProduct<Product>(getAllProducts, "getAllProducts");
 
   useEffect(() => {
     console.log("products", products);

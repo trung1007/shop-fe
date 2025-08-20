@@ -38,8 +38,9 @@ interface FetchApiResponse<T> {
 
 function useProduct<T>(
   fetchApi: (params: FetchApiParams) => Promise<FetchApiResponse<T>>,
+  customQueryKey: string = "",
   filterObj: Record<string, any> = {},
-  searchParam: string = "",
+  searchParam: string = ""
 ) {
   const router = useRouter();
   const pathname = usePathname();
@@ -76,7 +77,8 @@ function useProduct<T>(
     if (serverParams.sortField !== "id" || serverParams.sortAscending) {
       params.set(
         "sort",
-        `${serverParams.sortField},${serverParams.sortAscending ? "ASC" : "DESC"
+        `${serverParams.sortField},${
+          serverParams.sortAscending ? "ASC" : "DESC"
         }`
       );
     }
@@ -89,7 +91,7 @@ function useProduct<T>(
       params.set("size", serverParams.size.toString());
     }
 
-    router.replace(`${pathname}?${params.toString().replace(/%2C/g, ',')}`);
+    router.replace(`${pathname}?${params.toString().replace(/%2C/g, ",")}`);
   };
 
   const onParamsChange = (params: Partial<ServerParams>) => {
@@ -136,7 +138,7 @@ function useProduct<T>(
   }, []);
 
   // fetch data với React Query
-  const queryKey = ["records", serverParams];
+  const queryKey = [customQueryKey, serverParams];
   const { data, isFetching, refetch } = useQuery<ApiResponse<T>>({
     queryKey,
     queryFn: async () => {

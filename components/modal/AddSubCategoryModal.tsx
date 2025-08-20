@@ -64,25 +64,9 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
 
   const dispatch = useDispatch();
 
-  // const {
-  //   data: categoryOptions = [],
-  //   isLoading,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["categories"],
-  //   queryFn: async () => {
-  //     const data = await getListCategories();
-  //     return data.map((cat: any) => ({
-  //       label: cat.name,
-  //       value: cat.id,
-  //     }));
-  //   },
-  //   refetchOnWindowFocus: false,
-  // });
-
   const {
     records: categories,
-  } = useProduct<Category>(getListCategories,);
+  } = useProduct<Category>(getListCategories,"getListCategoriesAdd");
   const [categoryOptions, setCategoryOptions] = useState<Option[]>([]);
   useEffect(() => {
     const option = categories.map((cat: Category) => ({

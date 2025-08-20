@@ -35,11 +35,8 @@ const SubCategoryAdminPage = () => {
     serverParams,
     fetchRecords,
     onParamsChange,
-  } = useProduct<SubCategory>(getListSubCategories);
+  } = useProduct<SubCategory>(getListSubCategories,"getListSubCategory");
 
-  useEffect(() => {
-    console.log("subcategories", subcategories);
-  }, [subcategories]);
 
   const handleSearch = useCallback(
     debounce((value: string) => {
