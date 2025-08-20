@@ -56,7 +56,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const categoryOptions =
     data?.map((cat: any) => ({
       label: cat.subCategoryInfo.name,
-      value: cat.categoryId,
+      value: cat.subCategoryInfo.id,
     })) ?? [];
 
   const watchedPrice = watch("price");
@@ -100,6 +100,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       onOk={handleSubmit(handleFormSubmit)}
       okText="Thêm"
       cancelText="Hủy"
+      okButtonProps={{
+        style: {
+          backgroundColor: "var(--color-primary)",
+          borderColor: "var(--color-primary)",
+        },
+      }}
     >
       <form className="flex flex-col gap-4 pt-2">
         <Controller

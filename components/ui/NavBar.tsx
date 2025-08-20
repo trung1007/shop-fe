@@ -36,7 +36,8 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
     queryKey: ["categories", "list"],
     queryFn: async () => {
       const data = await getListCategories();
-      const mappedData: HoverDropdownOption[] = data.map((category: any) => ({
+
+      const mappedData: HoverDropdownOption[] = data?.data.map((category: any) => ({
         label: category.name,
         value: category.slug,
         childrenOptions: category.subCategoryList.map((subCategory: any) => ({
@@ -44,7 +45,6 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
           value: subCategory.slug,
         })),
       }));
-      console.log("mappedData", mappedData);
       
       return mappedData;
     },

@@ -22,7 +22,19 @@ import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "@/stores/loadingSlice";
 import { useQuery } from "@tanstack/react-query";
 import BaseCheckBox from "../common/BaseCheckBox";
+import useProduct from "@/hooks/useProduct";
 
+
+type Category = {
+  id: number;
+  name: string;
+  img: string;
+  description: string;
+};
+type Option = {
+  label: string;
+  value: number;
+};
 interface AddCategoryModalProps {
   open: boolean;
   onClose: () => void;
@@ -53,20 +65,17 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
   const dispatch = useDispatch();
 
   const {
-    data: categoryOptions = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const data = await getListCategories();
-      return data.map((cat: any) => ({
-        label: cat.name,
-        value: cat.id,
-      }));
-    },
-    refetchOnWindowFocus: false,
-  });
+    records: categories,
+  } = useProduct<Category>(getListCategories,"getListCategoriesAdd");
+  const [categoryOptions, setCategoryOptions] = useState<Option[]>([]);
+  useEffect(() => {
+    const option = categories.map((cat: Category) => ({
+      label: cat.name,
+      value: cat.id
+    }))
+    setCategoryOptions(option)
+  }, [categories])
+
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -81,7 +90,7 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
         rootCategoryId: data.categoryId,
         popular: data.isPopular,
       };
-      
+
       await addSubCategory(payloadAddSubCategory, data.image);
       onSuccess?.();
       reset();
