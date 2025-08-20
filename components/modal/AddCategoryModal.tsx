@@ -48,8 +48,6 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
         name: data.name,
         description: data.description,
       };
-
-
       await addCategory(payloadAddCategory, data.image);
       onSuccess?.();
       reset();

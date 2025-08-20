@@ -14,6 +14,7 @@ import {
   FilterOperator,
   FilterOperatorField,
 } from "@/constants/FilterOperator";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 type Product = {
   id: number;
   name: string;
@@ -66,17 +67,20 @@ const AdminProductPage = () => {
     <div className="p-6 flex flex-col">
       <div className="flex flex-1 items-center justify-between mb-6 gap-5">
         <h1 className="text-2xl font-bold">Danh sách sản phẩm</h1>
-        <div className="flex flex-1">
-          <BaseInputSearch
-            placeholder="Tìm kiếm sản phẩm"
-            value={searchKey}
-            className="w-full"
-            onChange={onSearchChange}
-          />
+        <div className="flex flex-wrap gap-3">
+          <div className="flex flex-1">
+            <BaseInputSearch
+              placeholder="Tìm kiếm sản phẩm"
+              value={searchKey}
+              className="w-full"
+              onChange={onSearchChange}
+            />
+          </div>
+          <BaseButton onClick={() => setIsModalOpen(true)}>
+            Thêm sản phẩm
+          </BaseButton>
         </div>
-        <BaseButton onClick={() => setIsModalOpen(true)}>
-          Thêm sản phẩm
-        </BaseButton>
+
       </div>
 
       <div className="overflow-x-auto rounded-lg shadow">
@@ -103,6 +107,9 @@ const AdminProductPage = () => {
               </th>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
                 Danh mục
+              </th>
+              <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                Thao tác
               </th>
             </tr>
           </thead>
@@ -133,6 +140,28 @@ const AdminProductPage = () => {
                 </td>
                 <td className="px-4 py-2 text-sm">{product.stockQuantity}</td>
                 <td className="px-4 py-2 text-sm">{product.category?.name}</td>
+                <td className="px-4 py-2 h-full text-sm">
+                  <div className="flex h-full items-center space-x-4">
+                    <button
+                      // onClick={() => handleView(subcategory)}
+                      className="text-blue-500 hover:text-blue-700 text-xl"
+                    >
+                      <FaEye />
+                    </button>
+                    <button
+                      // onClick={() => handleEdit(subcategory)}
+                      className="text-green-500 hover:text-green-700 text-xl"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      // onClick={() => handleDelete(subcategory.subCategoryInfo?.id)}
+                      className="text-red-500 hover:text-red-700 text-xl"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -152,7 +181,7 @@ const AdminProductPage = () => {
         <AddProductModal
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          // onSubmit={handleAddProduct}
+        // onSubmit={handleAddProduct}
         />
       )}
     </div>

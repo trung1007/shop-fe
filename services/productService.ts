@@ -1,12 +1,12 @@
 import api from "@/lib/axios";
 
-export const getListCategories = async () => {
-  const response = await api.get("/category/all");
+export const getListCategories = async (params: any) => {
+  const response = await api.get("/category/all", { params });
   return response.data;
 };
 
-export const getListSubCategories = async () => {
-  const response = await api.get("/sub_category/all");
+export const getListSubCategories = async (params: any) => {
+  const response = await api.get("/sub_category/all", { params });
   return response.data;
 };
 

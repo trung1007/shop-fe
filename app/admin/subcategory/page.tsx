@@ -1,14 +1,17 @@
 "use client";
 
 import BaseButton from "@/components/common/BaseButton";
+import BaseInputSearch from "@/components/common/BaseInputSearch";
 import AddSubCategoryModal from "@/components/modal/AddSubCategoryModal";
+import { FilterOperator, FilterOperatorField } from "@/constants/FilterOperator";
 import useProduct from "@/hooks/useProduct";
 import { getListSubCategories } from "@/services/productService";
 import { Pagination } from "antd";
-import { useEffect, useState } from "react";
+import debounce from "lodash.debounce";
+import { useCallback, useEffect, useState } from "react";
+import { FaEdit, FaTrash, FaPlus, FaEye } from "react-icons/fa";
 
 type SubCategory = {
-  id: number;
   categoryName: string;
   imgUrl: string;
   subCategoryInfo: subInfo;
@@ -17,10 +20,12 @@ type SubCategory = {
 type subInfo = {
   name: string;
   description: string;
+  id: number;
 };
 
 const SubCategoryAdminPage = () => {
   const [isSubCategoryOpen, setIsSubCategoryOpen] = useState(false);
+  const [searchKey, setSearchKey] = useState("");
 
   const {
     records: subcategories,
@@ -36,11 +41,33 @@ const SubCategoryAdminPage = () => {
     console.log("subcategories", subcategories);
   }, [subcategories]);
 
+  const handleSearch = useCallback(
+    debounce((value: string) => {
+      onParamsChange({ searchKey: value });
+    }, 500),
+    [serverParams, fetchRecords]
+  );
+
+  const onSearchChange = (value: string) => {
+    const valueSearch =
+      FilterOperatorField.NAME + FilterOperator.CONTAINS + value;
+    setSearchKey(value);
+    handleSearch(valueSearch);
+  };
+
   return (
     <div className="p-6 flex flex-col">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Danh sách Danh mục con</h1>
         <div className="flex flex-wrap gap-3">
+          <div className="flex flex-1">
+            <BaseInputSearch
+              placeholder="Tìm kiếm danh mục"
+              value={searchKey}
+              className="w-full"
+              onChange={onSearchChange}
+            />
+          </div>
           <BaseButton onClick={() => setIsSubCategoryOpen(true)}>
             Thêm danh mục con
           </BaseButton>
@@ -65,11 +92,14 @@ const SubCategoryAdminPage = () => {
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
                 Danh mục cha
               </th>
+              <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                Thao tác
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {subcategories?.map((subcategory: SubCategory, index: number) => (
-              <tr key={subcategory.id}>
+              <tr key={subcategory.subCategoryInfo?.id ?? `subcategory-${index}`}>
                 <td className="px-4 py-2 text-sm">
                   {(serverParams.page - 1) * serverParams.size + (index + 1)}
                 </td>
@@ -98,8 +128,30 @@ const SubCategoryAdminPage = () => {
                 <td className="px-4 py-2 text-sm">
                   {subcategory.subCategoryInfo?.description ?? "—"}
                 </td>
-                 <td className="px-4 py-2 text-sm">
+                <td className="px-4 py-2 text-sm">
                   {subcategory.categoryName ?? "—"}
+                </td>
+                <td className="px-4 py-2 h-full text-sm">
+                  <div className="flex h-full items-center space-x-4">
+                    <button
+                      // onClick={() => handleView(subcategory)}
+                      className="text-blue-500 hover:text-blue-700 text-xl"
+                    >
+                      <FaEye />
+                    </button>
+                    <button
+                      // onClick={() => handleEdit(subcategory)}
+                      className="text-green-500 hover:text-green-700 text-xl"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      // onClick={() => handleDelete(subcategory.subCategoryInfo?.id)}
+                      className="text-red-500 hover:text-red-700 text-xl"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -108,9 +160,9 @@ const SubCategoryAdminPage = () => {
       </div>
       <div className="mt-4 flex justify-end">
         <Pagination
-          current={serverParams.page} // ✅ lấy từ serverParams
-          pageSize={serverParams.size} // ✅ lấy từ serverParams
-          total={totalRecords} // ✅ từ API
+          current={serverParams.page}
+          pageSize={serverParams.size}
+          total={totalRecords}
           onChange={(page) => onParamsChange({ page })} // ✅ đổi page
           showSizeChanger={false}
         />
@@ -119,7 +171,7 @@ const SubCategoryAdminPage = () => {
         <AddSubCategoryModal
           open={isSubCategoryOpen}
           onClose={() => setIsSubCategoryOpen(false)}
-          // onSubmit={handleAddProduct}
+        // onSubmit={handleAddProduct}
         />
       )}
     </div>
