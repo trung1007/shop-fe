@@ -25,7 +25,6 @@ const ListCollection = () => {
     queryKey: ["categories", "popular-sub"],
     queryFn: async () => {
       const data = await getPopularSubCategories();
-      console.log("subCategory", data);
 
       return data.map((cat: any) => ({
         imgUrl: cat.imgUrl,

@@ -15,12 +15,21 @@ export const getAllProducts = async (params: any) => {
   return response.data;
 };
 
+export const getDetaiProduct = async (id: any) => {
+  const response = await api.get(`/product/${id}`);
+  return response.data;
+};
+
 export const getPopularSubCategories = async () => {
   const response = await api.get("/sub_category/popular");
   return response.data;
 };
 
-export const addProduct = async (product: any, imageDetails: File[], imageThumbnails: File[]) => {
+export const addProduct = async (
+  product: any,
+  imageDetails: File[],
+  imageThumbnails: File[]
+) => {
   const formData = new FormData();
   formData.append(
     "product",
