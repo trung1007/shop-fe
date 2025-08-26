@@ -2,36 +2,39 @@ import Image from "next/image";
 import productImg2 from "@/assets/images/product-img-test-1.webp";
 import productImg1 from "@/assets/images/product-img-test-2.png";
 import Link from "next/link";
+import { formatPrice } from "@/utils";
 
-const ProductCard = () => {
-    const productId = 123;
+const ProductCard = ({ product }: any) => {
     return (
         <div className="group relative w-full flex flex-col cursor-pointer ">
             <div className="product-card relative flex flex-col gap-2 px-4 py-3 bg-white  shadow-md hover:shadow-lg transition-shadow duration-300 w-full">
 
-                <Link href={`/product/${productId}`}>
+                <Link href={`/product/${product.id}`}>
                     <div className="relative w-full aspect-square overflow-hidden">
                         <Image
-                            src={productImg1}
-                            alt="Product"
+                            src={product.imgUrls?.[0] || productImg2}
+                            alt={product.name}
                             fill
                             className="object-cover transition-opacity duration-300 group-hover:opacity-0"
                         />
-                        <Image
-                            src={productImg2}
-                            alt="Product Hover"
-                            fill
-                            className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        />
+
+                        {product.imgUrls?.[1] && (
+                            <Image
+                                src={product.imgUrls[1]}
+                                alt={`${product.name} Hover`}
+                                fill
+                                className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                            />
+                        )}
                     </div>
 
                     <p className="text-sm font-medium line-clamp-2 cursor-pointer hover:text-[var(--color-primary)]">
-                        Bàn phím cơ Aula F75 (Mạch xuôi 5 pin, Gasket Mount, Led RGB, Switch Outemu)
+                        {product.name}
                     </p>
 
                     <div className="flex flex-col">
                         <span className="text-lg font-bold text-[var(--color-primary)]">
-                            690.000₫
+                            {formatPrice(product.price)}₫
                         </span>
                         <span className="text-gray-400 text-sm line-through">800.000₫</span>
                     </div>

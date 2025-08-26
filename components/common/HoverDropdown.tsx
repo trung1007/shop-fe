@@ -5,6 +5,7 @@ import Link from "next/link";
 export interface HoverDropdownOption {
   label: string;
   value: string;
+  slug?: string;
   icon?: IconType;
   styleIcon?: string;
   childrenOptions?: ChildrenDropDownOptions[];
@@ -13,6 +14,7 @@ export interface HoverDropdownOption {
 interface ChildrenDropDownOptions {
   label: string;
   value: string;
+  slug?: string;
 }
 
 interface HoverDropdownProps {
@@ -64,16 +66,10 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
             return (
               <Link
                 key={index}
-                href={
-                  hasChildren
-                    ? `/products/${option.value}`
-                    : `/products/${option.value}`
-                }
-                className={`w-full flex items-center ${
-                  uppercase ? "uppercase" : ""
-                } px-4 py-2 text-sm text-gray-700 hover:text-white ${
-                  hoveredIndex === index ? "bg-emerald-500 text-white" : ""
-                }`}
+                href={`/products/${option.slug}`}
+                className={`w-full flex items-center ${uppercase ? "uppercase" : ""
+                  } px-4 py-2 text-sm text-gray-700 hover:text-white ${hoveredIndex === index ? "bg-emerald-500 text-white" : ""
+                  }`}
                 onMouseEnter={() => setHoveredIndex(index)}
               >
                 {option.icon && (
@@ -93,10 +89,9 @@ const HoverDropdown: React.FC<HoverDropdownProps> = ({
               {options[hoveredIndex].childrenOptions!.map((sub, i) => (
                 <Link
                   key={i}
-                  href={`/products/${options[hoveredIndex].value}/${sub.value}`}
-                  className={`text-emerald-600 cursor-pointer hover:underline ${
-                    uppercase ? "uppercase" : ""
-                  }`}
+                  href={`/products/${options[hoveredIndex].slug}/${sub.slug}`}
+                  className={`text-emerald-600 cursor-pointer hover:underline ${uppercase ? "uppercase" : ""
+                    }`}
                 >
                   {sub.label}
                 </Link>

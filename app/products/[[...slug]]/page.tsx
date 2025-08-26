@@ -3,7 +3,7 @@ import BreadCrumb from "@/components/common/BreadCrumb";
 import ListCollection from "@/components/ui/ListCollection";
 import ProductCard from "@/components/ui/ProductCard"
 import ProductCardTmp from "@/components/ui/ProductCardTmp";
-import { ProductCategory} from "@/const/enum";
+import { ProductCategory } from "@/const/enum";
 import { FilterOperator } from "@/constants/FilterOperator";
 import useCommonRepository from "@/hooks/useCommonRepository";
 import useProduct from "@/hooks/useProduct";
@@ -78,13 +78,15 @@ const Product = () => {
         sortField,
         serverParams,
         fetchRecords
-    } = useProduct<Product>(getAllProducts, filter, searchKey);
+    } = useProduct<Product>(getAllProducts, "getListsProductByFilter", filter, searchKey);
 
-
-    useEffect(()=>{
+    useEffect(() => {
         console.log("products", products);
-        
-    },[products])
+
+    }, [products])
+
+
+
     // const {
     //     records: products,
     //     fetching,
@@ -130,35 +132,10 @@ const Product = () => {
                                 </button>
                             ))}
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Link href="/products">
-                                <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
-                                >
-                                    all
-                                </button>
-                            </Link>
-
-                            <Link href={"/products/tech"}>
-                                <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
-
-                                >
-                                    categoryId=6(cong nghe)
-                                </button>
-                            </Link>
-
-                            <Link href={"/products/tech/laptop"}>
-                                <button className="px-4 py-2 border border-gray-300 rounded-full text-sm hover:bg-gray-100 font-semibold"
-                                >
-                                    subCategoryId=10(laptop)
-                                </button>
-                            </Link>
-
-
-                        </div>
                     </div>
                     <div className="grid grid-cols-4 gap-2">
-                        {products.map((product) => (
-                            <ProductCardTmp key={JSON.stringify(product)} product={product} />
+                        {(products || []).map((product: any) => (
+                            <ProductCard key={product.id} product={product} />
                         ))}
                     </div>
                 </div>

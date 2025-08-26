@@ -5,8 +5,10 @@ import ProductCard from "./ProductCard";
 import { FaAngleRight } from "react-icons/fa";
 import useCommonRepository from "@/hooks/useCommonRepository";
 import { getAllProducts } from "@/services/productService";
+import { useEffect } from "react";
 
-const GroupProduct = ({ groupTitle, type, slug }: any) => {
+const GroupProduct = ({ groupTitle, type, slug, products }: any) => {
+
 
     return (
         <div className="group-product flex flex-col gap-2 w-full px-[64px] mt-[60px]" id={type} >
@@ -20,11 +22,9 @@ const GroupProduct = ({ groupTitle, type, slug }: any) => {
                 </div>
             </div>
             <div className="grid grid-cols-4 gap-2 h-fit" >
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-
+                {(products || []).map((product: any) => (
+                    <ProductCard key={product.id} product={product} />
+                ))}
             </div>
 
 

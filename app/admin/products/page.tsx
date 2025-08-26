@@ -45,9 +45,6 @@ const AdminProductPage = () => {
     onParamsChange,
   } = useProduct<Product>(getAllProducts, "getAllProducts");
 
-  useEffect(() => {
-    console.log("products", products);
-  }, [products]);
 
   const handleSearch = useCallback(
     debounce((value: string) => {
