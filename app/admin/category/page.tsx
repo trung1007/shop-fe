@@ -5,18 +5,23 @@ import AddCategoryModal from "@/components/modal/AddCategoryModal";
 import AddSubCategoryModal from "@/components/modal/AddSubCategoryModal";
 import { FilterOperator, FilterOperatorField } from "@/constants/FilterOperator";
 import useProduct from "@/hooks/useProduct";
-import { getListCategories } from "@/services/productService";
+import { getAllCategories } from "@/services/productService";
 import { Button, Pagination } from "antd";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useState } from "react";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
 type Category = {
-  id: number;
-  name: string;
+  categoryInfo: CategoryInfo;
   img: string;
-  description: string;
 };
+
+type CategoryInfo = {
+  name: string,
+  id: number,
+  slug: string,
+  description: string
+}
 
 const CategoryAdminPage = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -30,7 +35,7 @@ const CategoryAdminPage = () => {
     serverParams,
     fetchRecords,
     onParamsChange,
-  } = useProduct<Category>(getListCategories,"getListCategories");
+  } = useProduct<Category>(getAllCategories, "getAllCategories");
 
   const handleSearch = useCallback(
     debounce((value: string) => {
@@ -87,17 +92,17 @@ const CategoryAdminPage = () => {
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {categories?.map((category: Category, index: number) => (
-              <tr key={category.id}>
+              <tr key={category.categoryInfo?.id}>
                 <td className="px-4 py-2 text-sm">
                   {" "}
                   {(serverParams.page - 1) * serverParams.size + (index + 1)}
                 </td>
-                <td className="px-4 py-2 text-sm">{category.name}</td>
+                <td className="px-4 py-2 text-sm">{category.categoryInfo?.name}</td>
                 <td className="px-4 py-2">
                   {category.img != null ? (
                     <img
                       src={category.img}
-                      alt={category.name}
+                      alt={category.categoryInfo?.name}
                       className="h-20 w-20 object-cover rounded"
                     />
                   ) : (
@@ -107,7 +112,7 @@ const CategoryAdminPage = () => {
                   )}
                 </td>
                 <td className="px-4 py-2 text-sm">
-                  {category.description ?? "-"}
+                  {category.categoryInfo?.description ?? "-"}
                 </td>
                 <td className="px-4 py-2 h-full text-sm">
                   <div className="flex h-full items-center space-x-4">

@@ -35,7 +35,7 @@ type Category = {
   img: string;
   slug: string;
   description: string;
-  subCategoryList: SubCategory[];
+  childrenCategoryInfoDTO: SubCategory[];
 };
 
 type SubCategory = {
@@ -46,36 +46,29 @@ type SubCategory = {
 
 const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
 
-  const dispatch = useDispatch()
-
-
   const { data: categories, isLoading, isError } = useQuery({
     queryKey: ["getListCategoriesNavBar"],
-    queryFn: async () => await getListCategories(""),
+    queryFn: async () => await getListCategories(),
     refetchOnWindowFocus: false,
   });
   const [categoryOptions, setCategoryOptions] = useState<HoverDropdownOption[]>([]);
 
   useEffect(() => {
-
-    console.log("categories", categories);
-    
-
-    const option: HoverDropdownOption[] = (categories || []).map((cat: Category) => ({
-      label: cat.name,
-      slug: cat.slug,
-      value: String(cat.id), // ép về string để đúng type
-      childrenOptions: cat.subCategoryList.map((subCategory: SubCategory) => ({
-        label: subCategory.name,
-        value: subCategory.slug,
-        slug: subCategory.slug,
-      })),
-    }));
-
-    console.log("option", option);
-    
-
-    setCategoryOptions(option)
+    if (categories?.length) {
+     
+      
+      const option: HoverDropdownOption[] = (categories || [])?.map((cat: Category) => ({
+        label: cat.name,
+        slug: cat.slug,
+        value: String(cat.id), // ép về string để đúng type
+        childrenOptions: cat.childrenCategoryInfoDTO?.map((subCategory: SubCategory) => ({
+          label: subCategory.name,
+          value: subCategory.slug,
+          slug: subCategory.slug,
+        })),
+      }));
+      setCategoryOptions(option)
+    }
   }, [categories])
 
 
@@ -100,7 +93,7 @@ const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
         {/* Nút Danh Mục */}
         <HoverDropdown
           label="DANH MỤC"
-          options={categoryOptions}
+          options={categoryOptions || []}
           icon={FiMenu}
           style="flex items-center px-3 rounded-lg py-3 bg-emerald-500 hover:bg-emerald-600 text-white"
           dropdownWidth="w-40"
