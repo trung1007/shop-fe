@@ -28,8 +28,6 @@ import useProduct from "@/hooks/useProduct";
 type Category = {
   id: number;
   name: string;
-  img: string;
-  description: string;
 };
 type Option = {
   label: string;
@@ -65,15 +63,21 @@ const AddSubCategoryModal: React.FC<AddCategoryModalProps> = ({
   const dispatch = useDispatch();
 
   const {
-    records: categories,
-  } = useProduct<Category>(getListCategories,"getListCategoriesAdd");
+    data: categories,
+  } = useQuery({
+    queryKey: ["getListCategoriesAddSubCategory"],
+    queryFn: async () => await getListCategories(),
+    refetchOnWindowFocus: false,
+  });
   const [categoryOptions, setCategoryOptions] = useState<Option[]>([]);
   useEffect(() => {
-    const option = categories.map((cat: Category) => ({
-      label: cat.name,
-      value: cat.id
-    }))
-    setCategoryOptions(option)
+    if (categories?.length) {
+      const option = categories?.map((cat: Category) => ({
+        label: cat.name,
+        value: cat.id
+      }))
+      setCategoryOptions(option)
+    }
   }, [categories])
 
 

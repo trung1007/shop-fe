@@ -5,23 +5,27 @@ import BaseInputSearch from "@/components/common/BaseInputSearch";
 import AddSubCategoryModal from "@/components/modal/AddSubCategoryModal";
 import { FilterOperator, FilterOperatorField } from "@/constants/FilterOperator";
 import useProduct from "@/hooks/useProduct";
-import { getListSubCategories } from "@/services/productService";
+import { getAllSubCategories } from "@/services/productService";
 import { Pagination } from "antd";
 import debounce from "lodash.debounce";
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { FaEdit, FaTrash, FaPlus, FaEye } from "react-icons/fa";
 
 type SubCategory = {
-  categoryName: string;
+  categoryInfo: CategoryInfo;
   imgUrl: string;
-  subCategoryInfo: subInfo;
+  subCategoryInfo: subCategoryInfo;
 };
 
-type subInfo = {
+type subCategoryInfo = {
   name: string;
   description: string;
   id: number;
 };
+type CategoryInfo = {
+  name:string,
+  id:number
+}
 
 const SubCategoryAdminPage = () => {
   const [isSubCategoryOpen, setIsSubCategoryOpen] = useState(false);
@@ -35,7 +39,7 @@ const SubCategoryAdminPage = () => {
     serverParams,
     fetchRecords,
     onParamsChange,
-  } = useProduct<SubCategory>(getListSubCategories,"getListSubCategory");
+  } = useProduct<SubCategory>(getAllSubCategories, "getAllSubCategories");
 
 
   const handleSearch = useCallback(
@@ -126,7 +130,7 @@ const SubCategoryAdminPage = () => {
                   {subcategory.subCategoryInfo?.description ?? "—"}
                 </td>
                 <td className="px-4 py-2 text-sm">
-                  {subcategory.categoryName ?? "—"}
+                  {subcategory.categoryInfo.name ?? "—"}
                 </td>
                 <td className="px-4 py-2 h-full text-sm">
                   <div className="flex h-full items-center space-x-4">

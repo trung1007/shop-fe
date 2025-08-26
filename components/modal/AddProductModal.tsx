@@ -55,8 +55,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
   const categoryOptions =
     data?.map((cat: any) => ({
-      label: cat.subCategoryInfo.name,
-      value: cat.subCategoryInfo.id,
+      label: cat.name,
+      value: cat.id,
     })) ?? [];
 
   const watchedPrice = watch("price");
@@ -72,7 +72,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      console.log(payloadAddProduct, data.imageDetails, data.imageThumbnails);
 
       await addProduct(
         payloadAddProduct,
