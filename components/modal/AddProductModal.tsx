@@ -1,28 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal } from "antd";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 
-import { addProduct, getListCategories } from "@/services/productService";
+import { addProduct, getListSubCategories } from "@/services/productService";
 import { ProductInput, ProductSchema } from "@/schemas/product.schema";
 import BaseInput from "@/components/common/BaseInput";
 import BaseDropdown from "../common/BaseDropdown";
 import BaseUpload from "../common/BaseUpload";
-import { uploadFile } from "@/services";
-import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "@/stores/loadingSlice";
 
 interface AddProductModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
-}
-
-interface Category {
-  id: number;
-  name: string;
 }
 
 const AddProductModal: React.FC<AddProductModalProps> = ({
@@ -35,43 +30,34 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     handleSubmit,
     reset,
     watch,
-    setValue,
     formState: { errors },
   } = useForm<ProductInput>({
     defaultValues: {
       name: "",
       price: 0,
       quantity: 0,
-      image: null,
+      imageDetails: [],
+      imageThumbnails: [],
       description: "",
     },
     resolver: zodResolver(ProductSchema),
   });
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const [categoryOptions, setCategoryOptions] = useState<
-    { label: string; value: number }[]
-  >([]);
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getListCategories();
-        const mapped = data.map((cat: any) => ({
-          label: cat.name,
-          value: cat.id,
-        }));
-        setCategoryOptions(mapped);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách categories:", error);
-      }
-    };
+  // ✅ Sử dụng react-query thay cho useEffect
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["subCategories"],
+    queryFn: getListSubCategories,
+    refetchOnWindowFocus: false,
+  });
 
-    fetchCategories();
-  }, []);
+  const categoryOptions =
+    data?.map((cat: any) => ({
+      label: cat.name,
+      value: cat.id,
+    })) ?? [];
 
   const watchedPrice = watch("price");
   const watchedQuantity = watch("quantity");
@@ -86,7 +72,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         stockQuantity: data.quantity,
         categoryId: data.categoryId,
       };
-      await addProduct(payloadAddProduct, data.image);
+
+      await addProduct(
+        payloadAddProduct,
+        data.imageDetails,
+        data.imageThumbnails
+      );
       onSuccess?.();
       reset();
       Promise.resolve().then(() => {
@@ -108,6 +99,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       onOk={handleSubmit(handleFormSubmit)}
       okText="Thêm"
       cancelText="Hủy"
+      okButtonProps={{
+        style: {
+          backgroundColor: "var(--color-primary)",
+          borderColor: "var(--color-primary)",
+        },
+      }}
     >
       <form className="flex flex-col gap-4 pt-2">
         <Controller
@@ -180,15 +177,31 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         />
 
         <Controller
-          name="image"
+          name="imageDetails"
           control={control}
           render={({ field }) => (
             <BaseUpload
-              id="image"
+              id="imageDetails"
               {...field}
               label="Hình ảnh"
-              error={errors.image?.message}
-              onChange={(file) => setValue("image", file)}
+              error={errors.imageDetails?.message}
+              multiple={true}
+              onChange={(files: File[]) => field.onChange(files)}
+            />
+          )}
+        />
+
+        <Controller
+          name="imageThumbnails"
+          control={control}
+          render={({ field }) => (
+            <BaseUpload
+              id="imageThumbnails"
+              {...field}
+              label="Hình ảnh"
+              error={errors.imageThumbnails?.message}
+              multiple={true}
+              onChange={(files: File[]) => field.onChange(files)}
             />
           )}
         />

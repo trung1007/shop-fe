@@ -3,15 +3,32 @@
 import BreadCrumb from "@/components/common/BreadCrumb";
 import productImg2 from "@/assets/images/product-img-test-1.webp";
 import productImg1 from "@/assets/images/product-img-test-2.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Table, Tabs } from "antd";
 import "@/styles/tabs.css";
+import { getDetaiProduct } from "@/services/productService";
+import { useQuery } from "@tanstack/react-query";
+import { useParams, useSearchParams } from "next/navigation";
+import { formatPrice } from "@/utils";
 
 const ProductDetail = () => {
+
+    const params = useParams();
+    const id = params?.id ? parseInt(params.id as string) : 0;
+
+
+    const { data: product, isLoading, isError } = useQuery({
+        queryKey: ["detailProduct"],
+        queryFn: async () => await getDetaiProduct(id),
+        refetchOnWindowFocus: false,
+    });
+
+
+
     const { TabPane } = Tabs;
-    const images = [productImg1, productImg2, productImg1, productImg2];
+    const images = (product?.imgUrls && product.imgUrls.length > 0) ? product.imgUrls : [productImg1, productImg2];
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const prevImage = () => {
@@ -83,7 +100,7 @@ const ProductDetail = () => {
                                     transform: `translateX(-${currentIndex * 100}%)`,
                                 }}
                             >
-                                {images.map((img, idx) => (
+                                {images.map((img: any, idx: number) => (
                                     <div
                                         key={idx}
                                         className="w-full flex-shrink-0 flex justify-center items-center bg-white h-[300px]"
@@ -91,6 +108,8 @@ const ProductDetail = () => {
                                         <Image
                                             src={img}
                                             alt={`Product ${idx}`}
+                                            width={300}
+                                            height={300}
                                             className="w-auto h-full object-contain"
                                         />
                                     </div>
@@ -121,7 +140,7 @@ const ProductDetail = () => {
 
                         {/* Thanh chọn ảnh nhỏ */}
                         <div className="flex justify-center gap-2 mt-3">
-                            {images.map((img, idx) => (
+                            {images.map((img: any, idx: number) => (
                                 <button
                                     key={idx}
                                     onClick={() => setCurrentIndex(idx)}
@@ -133,6 +152,8 @@ const ProductDetail = () => {
                                     <Image
                                         src={img}
                                         alt={`Thumb ${idx}`}
+                                        width={300}
+                                        height={300}
                                         className="w-16 h-16 object-contain bg-white"
                                     />
                                 </button>
@@ -144,7 +165,7 @@ const ProductDetail = () => {
                             <TabPane tab="Đặc điểm nổi bật" key="1">
                                 <div className="space-y-4 text-gray-800">
                                     <h2 className="text-2xl font-bold text-gray-900">
-                                        Bàn phím cơ AULA F75
+                                        {product?.name}
                                     </h2>
 
                                     {/* Ảnh sản phẩm */}
@@ -184,10 +205,10 @@ const ProductDetail = () => {
                 {/* Cột thông tin sản phẩm */}
                 <div className="bg-white flex flex-col h-fit p-5 ">
                     <h1 className="text-2xl font-bold mb-2">
-                        Bàn Phím Cơ Không Dây Lofree Flow
+                        {product?.name}
                     </h1>
                     <div className="flex items-center gap-3 mb-4">
-                        <span className="text-red-600 text-3xl font-bold">4.400.000₫</span>
+                        <span className="text-red-600 text-3xl font-bold">{formatPrice(product?.price)}đ</span>
                         <span className="line-through text-gray-500">6.800.000₫</span>
                         <span className="bg-red-100 text-red-600 px-2 py-1 rounded text-sm font-semibold">
                             -36%

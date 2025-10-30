@@ -1,14 +1,16 @@
-import axios from "@/lib/axios";
-import { uploadFile } from "@/services";
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import BaseButton from "./BaseButton";
+
 interface BaseUploadProps {
   label?: string;
   id: string;
-  onChange?: (file: File | null) => void;
+  onChange?: (files: File[]) => void;
   error?: string;
-  defaultImage?: string;
+  defaultImages?: string[];
+  multiple?: boolean;
+  resetTrigger?: any;
 }
 
 const BaseUpload: React.FC<BaseUploadProps> = ({
@@ -16,36 +18,59 @@ const BaseUpload: React.FC<BaseUploadProps> = ({
   id,
   onChange,
   error,
-  defaultImage,
+  defaultImages = [],
+  multiple = false,
+  resetTrigger,
 }) => {
-  const [preview, setPreview] = useState<string | null>(defaultImage || null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [previews, setPreviews] = useState<string[]>(defaultImages);
+  const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = event.target.files
+      ? Array.from(event.target.files)
+      : [];
+    if (!selectedFiles.length) return;
 
-    if (!file) return;
     setLoading(true);
     try {
-      const localImageUrl = URL.createObjectURL(file); 
-      setPreview(localImageUrl);
-      onChange?.(file);
-    } catch (error) {
-      console.error("Upload thất bại:", error);
+      const newPreviews = selectedFiles.map((file) =>
+        URL.createObjectURL(file)
+      );
+      setPreviews((prev) => [...prev, ...newPreviews]);
+      setFiles((prev) => [...prev, ...selectedFiles]);
+      onChange?.([...files, ...selectedFiles]);
+    } catch (err) {
+      console.error("Upload thất bại:", err);
     } finally {
       setLoading(false);
+      event.target.value = "";
     }
+  };
+
+  const handleRemove = (index: number) => {
+    const newPreviews = [...previews];
+    const newFiles = [...files];
+    newPreviews.splice(index, 1);
+    newFiles.splice(index, 1);
+    setPreviews(newPreviews);
+    setFiles(newFiles);
+    onChange?.(newFiles);
   };
 
   useEffect(() => {
     return () => {
-      if (preview && preview.startsWith("blob:")) {
-        URL.revokeObjectURL(preview);
-      }
+      previews.forEach((url) => {
+        if (url.startsWith("blob:")) URL.revokeObjectURL(url);
+      });
     };
-  }, [preview]);
+  }, [previews]);
+
+  useEffect(() => {
+    setPreviews([]);
+    setFiles([]);
+    onChange?.([]);
+  }, [resetTrigger]);
 
   return (
     <div className="w-full max-w-sm">
@@ -64,39 +89,52 @@ const BaseUpload: React.FC<BaseUploadProps> = ({
           className={`cursor-pointer rounded-md px-4 py-2 text-sm font-medium shadow-sm transition text-white ${
             loading
               ? "bg-gray-400 pointer-events-none opacity-60"
-              : "bg-blue-600 hover:bg-blue-700"
+              : "bg-[var(--color-primary)] hover:[var(--color-primary-hover)]"
           }`}
         >
-          {loading ? "Đang tải..." : "Chọn ảnh"}
+          {loading ? "Đang tải..." : multiple ? "Chọn ảnh" : "Chọn ảnh"}
         </label>
         <input
           id={id}
           type="file"
           accept="image/*"
+          multiple={multiple}
           onChange={handleFileChange}
           className="hidden"
           disabled={loading}
         />
       </div>
 
-      <div className="mt-4">
-        <div className="w-40 h-40 border border-dashed border-gray-300 rounded-md flex items-center justify-center overflow-hidden bg-gray-50">
-          {loading ? (
-            <div className="text-sm text-gray-500 animate-pulse">
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+      <div className="mt-4 flex flex-wrap gap-2">
+        {loading ? (
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+        ) : previews.length ? (
+          previews.map((src, index) => (
+            <div
+              key={index}
+              className="relative w-[120px] h-[120px] rounded-md  bg-gray-50"
+            >
+              <img
+                src={src}
+                alt={`Preview ${index}`}
+                className="w-full h-full object-cover pointer-events-none"
               />
+              {/* Icon x để xóa */}
+              <button
+                type="button"
+                onClick={() => handleRemove(index)}
+                className="absolute -top-2 -right-2 z-10 rounded-[50%] bg-white/80 hover:bg-white p-1 shadow"
+                aria-label="Remove image"
+              >
+                <CloseCircleOutlined color="red" />{" "}
+              </button>
             </div>
-          ) : preview ? (
-            <img
-              src={preview}
-              alt="Preview"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <span className="text-sm text-gray-400">Chưa có ảnh</span>
-          )}
-        </div>
+          ))
+        ) : (
+          <div className="w-[120px] h-[120px] border border-dashed border-gray-300 rounded-md  bg-gray-50 flex justify-center items-center cursor-pointer">
+            <span className="text-sm text-gray-400 ">Chưa có ảnh</span>
+          </div>
+        )}
       </div>
 
       {error && <p className="mt-2 text-sm text-red-500">{error}</p>}

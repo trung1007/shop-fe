@@ -1,7 +1,7 @@
 import Banner from "@/components/ui/Banner";
 import GroupProduct from "@/components/ui/GroupProduct";
 import ListCollection from "@/components/ui/ListCollection";
-import Image from "next/image";
+import ListGroupProduct from "@/components/ui/ListGroupProduct";
 
 export default function Home() {
   return (
@@ -11,13 +11,7 @@ export default function Home() {
         <ListCollection />
 
       </div>
-      <GroupProduct groupTitle="Tất cả sản phẩm" type="all" />
-
-      <GroupProduct groupTitle="Gợi ý hôm nay" />
-      <GroupProduct groupTitle="Sản phẩm bán chạy" />
-      <GroupProduct groupTitle="Siêu giảm giá" />
-      <GroupProduct groupTitle="Gợi ý hôm nay" />
-
+      <ListGroupProduct />
 
 
     </div>

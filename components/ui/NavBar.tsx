@@ -4,10 +4,15 @@ import { FiMenu, FiSearch, FiPhone, FiShoppingCart } from "react-icons/fi";
 import { BsFillLightningChargeFill } from "react-icons/bs";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HoverDropdown, { HoverDropdownOption } from "../common/HoverDropdown";
 import Link from "next/link";
 import CartModal from "../modal/CartModal";
+import { getListCategories } from "@/services/productService";
+import { useQuery } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "@/stores/loadingSlice";
+import useProduct from "@/hooks/useProduct";
 
 const contactOptions: HoverDropdownOption[] = [
   {
@@ -24,38 +29,75 @@ const contactOptions: HoverDropdownOption[] = [
   },
 ];
 
+type Category = {
+  id: number;
+  name: string;
+  img: string;
+  slug: string;
+  description: string;
+  childrenCategoryInfoDTO: SubCategory[];
+};
+
+type SubCategory = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
 const NavBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
-  const categoryOptions: HoverDropdownOption[] = [
-    { label: "Tất cả", value: "all" },
-    { label: "Công nghệ", value: "tech" },
-    { label: "Kinh doanh", value: "business" },
-    { label: "Sức khỏe", value: "health" },
-    { label: "Giáo dục", value: "education" },
-  ];
+
+  const { data: categories, isLoading, isError } = useQuery({
+    queryKey: ["getListCategoriesNavBar"],
+    queryFn: async () => await getListCategories(),
+    refetchOnWindowFocus: false,
+  });
+  const [categoryOptions, setCategoryOptions] = useState<HoverDropdownOption[]>([]);
+
+  useEffect(() => {
+    if (categories?.length) {
+     
+      
+      const option: HoverDropdownOption[] = (categories || [])?.map((cat: Category) => ({
+        label: cat.name,
+        slug: cat.slug,
+        value: String(cat.id), // ép về string để đúng type
+        childrenOptions: cat.childrenCategoryInfoDTO?.map((subCategory: SubCategory) => ({
+          label: subCategory.name,
+          value: subCategory.slug,
+          slug: subCategory.slug,
+        })),
+      }));
+      setCategoryOptions(option)
+    }
+  }, [categories])
+
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
-    <div className="w-full flex items-center justify-between px-[64px] py-2 bg-white shadow">
-      {/* Logo */}
-      <div className="flex items-center space-x-2">
-        <Link href="/" className="text-2xl font-bold text-gray-700">
-          <img
-            src="/images/logo-shop.png"
-            height={80}
-            width={100}
-            className="cursor-pointer"
-          />
-        </Link>
-        
-      </div>
+    <>
+      <div className="w-full flex items-center justify-between px-[64px] py-2 bg-white shadow">
+        {/* Logo */}
+        <div className="flex items-center space-x-2">
+          <Link href="/" className="text-2xl font-bold text-gray-700">
+            <img
+              src="/images/logo-shop.png"
+              height={80}
+              width={100}
+              className="cursor-pointer"
+            />
+          </Link>
+
+        </div>
 
         {/* Nút Danh Mục */}
         <HoverDropdown
           label="DANH MỤC"
-          options={categoryOptions}
+          options={categoryOptions || []}
           icon={FiMenu}
           style="flex items-center px-3 rounded-lg py-3 bg-emerald-500 hover:bg-emerald-600 text-white"
+          dropdownWidth="w-40"
+          uppercase={true}
         />
 
         {/* Thanh Tìm Kiếm */}

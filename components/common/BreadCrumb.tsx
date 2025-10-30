@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 
 interface BreadCrumbProps {
@@ -10,9 +11,9 @@ const BreadCrumb = ({ items }: BreadCrumbProps) => {
             {items.map((item, index) => (
                 <div key={index} className="flex items-center group">
                     {item.href ? (
-                        <a href={item.href} className="flex items-center group-hover:text-[var(--color-primary)]">
+                        <Link href={item.href} className="flex items-center group-hover:text-[var(--color-primary)]">
                             {item.label}
-                        </a>
+                        </Link>
                     ) : (
                         <span className="flex items-center text-gray-800 font-medium group-hover:text-[var(--color-primary)]">
                             {item.label}
