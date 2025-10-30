@@ -76,73 +76,11 @@ const ForgotPasswordPage = () => {
     }
   };
 
+  const goToLogin = () => {
+    route.push("/login");
+  };
+
   return (
-    // <div className="w-full min-h-[400px] h-fit mt-6 flex justify-center">
-    //   <div className="w-[50vw] h-full px-10 py-4 rounded-[16px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.05)] flex flex-col justify-center gap-4">
-    //     <h1 className="text-[24px] font-bold mb-4">
-    //       {resetPasswordToken ? "Đặt lại mật khẩu" : "Quên mật khẩu"}
-    //     </h1>
-    //     {resetPasswordToken ? (
-    //       <form
-    //         onSubmit={handleSubmitReset(onResetPassword)}
-    //         className="flex flex-col gap-4 mt-2"
-    //       >
-    //         <BaseInput
-    //           label="Mật khẩu mới"
-    //           id="password"
-    //           placeholder="Nhập mật khẩu mới"
-    //           type="password"
-    //           error={errorsReset.password?.message}
-    //           {...registerReset("password", {
-    //             required: "Vui lòng nhập mật khẩu mới",
-    //             minLength: {
-    //               value: 6,
-    //               message: "Mật khẩu cần ít nhất 6 ký tự",
-    //             },
-    //           })}
-    //         />
-    //         <BaseInput
-    //           label="Xác nhận mật khẩu"
-    //           id="confirmPassword"
-    //           placeholder="Nhập lại mật khẩu"
-    //           type="password"
-    //           error={errorsReset.confirmPassword?.message}
-    //           {...registerReset("confirmPassword", {
-    //             required: "Vui lòng xác nhận lại mật khẩu",
-    //           })}
-    //         />
-    //         <BaseButton type="submit" disabled={isSubmittingReset}>
-    //           {isSubmittingReset ? "Đang xử lý..." : "Đổi mật khẩu"}
-    //         </BaseButton>
-    //       </form>
-    //     ) : sent ? (
-    //       <div className="text-green-600 text-sm mt-4">
-    //         Hướng dẫn đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư.
-    //       </div>
-    //     ) : (
-    //       <>
-    //         <p className="text-[#667085] text-sm">
-    //           Nhập email của bạn để nhận hướng dẫn đặt lại mật khẩu.
-    //         </p>
-    //         <form
-    //           onSubmit={handleSubmit(onSubmit)}
-    //           className="flex flex-col gap-4 mt-2"
-    //         >
-    //           <BaseInput
-    //             label="Email"
-    //             id="email"
-    //             placeholder="Email"
-    //             error={errors.email?.message}
-    //             {...register("email", { required: "Vui lòng nhập email" })}
-    //           />
-    //           <BaseButton type="submit" disabled={isSubmitting}>
-    //             {isSubmitting ? "Đang gửi..." : "Gửi hướng dẫn"}
-    //           </BaseButton>
-    //         </form>
-    //       </>
-    //     )}
-    //   </div>
-    // </div>
     <div className="w-full min-h-[400px] h-fit flex justify-center items-center bg-[#f6f7fb] py-10 px-4">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <h1 className="text-2xl font-bold text-center mb-2">
@@ -150,9 +88,12 @@ const ForgotPasswordPage = () => {
         </h1>
         <p className="text-center text-sm text-gray-600 mb-4">
           Bạn chưa có tài khoản?{" "}
-          <a href="/register" className="text-blue-600 underline">
+          <span
+            onClick={() => route.push("/register")}
+            className="text-blue-600 underline"
+          >
             Đăng ký tại đây
-          </a>
+          </span>
         </p>
 
         <h2 className="text-center font-semibold mb-2 text-base">
@@ -195,12 +136,9 @@ const ForgotPasswordPage = () => {
             >
               {isSubmittingReset ? "Đang xử lý..." : "Đổi mật khẩu"}
             </BaseButton>
-            <a
-              href="/login"
-              className="text-center text-sm text-blue-600 underline"
-            >
+            <span onClick={goToLogin} className="text-blue-600 underline">
               Quay lại
-            </a>
+            </span>
           </form>
         ) : sent ? (
           <div className="text-green-600 text-center text-sm mt-6">
@@ -224,17 +162,14 @@ const ForgotPasswordPage = () => {
             >
               {isSubmitting ? "Đang gửi..." : "Lấy lại mật khẩu"}
             </BaseButton>
-            <a
-              href="/login"
-              className="text-center text-sm text-blue-600 underline"
-            >
+            <span onClick={goToLogin} className="text-blue-600 underline">
               Quay lại
-            </a>
+            </span>
           </form>
         )}
 
         {!resetPasswordToken && (
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center gap-4 mt-4">
             <button className="flex items-center gap-2 bg-[#3b5998] text-white px-4  rounded  ">
               <div className="flex items-center justify-center ">
                 <span className="text-lg border-r px-2">f</span>
