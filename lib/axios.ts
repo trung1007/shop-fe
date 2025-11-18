@@ -1,16 +1,35 @@
-import { persistor } from "@/stores/store";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { persistor } from "@/stores/store";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
-api.interceptors.request.use((config) => {
-  const token = Cookies.get("access_token");
+// Instance riêng chỉ dùng để refresh
+const refreshApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
 
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+let isRefreshing = false;
+let failedQueue: any[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error);
+    else prom.resolve(token);
+  });
+  failedQueue = [];
+};
+
+api.interceptors.request.use((config) => {
+  const access_token = Cookies.get("access_token");
+  const refresh_token = Cookies.get("refresh_token");
+  console.log("refresh_token", refresh_token);
+
+  if (access_token) config.headers.Authorization = `Bearer ${access_token}`;
   return config;
 });
 
@@ -18,46 +37,68 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    console.log("originalReq", originalRequest._retry);
 
-    // Nếu token hết hạn
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // tránh loop vô hạn
+    if (!error.response) return Promise.reject(error);
+
+    // Khi bị 401
+    if (error.response.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // Nếu đang refresh, chờ refresh xong rồi retry
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = "Bearer " + token;
+            return api(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refreshToken = Cookies.get("refresh_token");
+      console.log("refreshToken", refreshToken);
+
+      // if (!refreshToken) {
+      //   clearAuth();
+      //   return Promise.reject(error);
+      // }
 
       try {
-        // Gọi API refresh token
-        const refreshToken = Cookies.get("refresh_token");
-        if (!refreshToken) {
-          // Không có refresh token => logout
-          Cookies.remove("access_token");
-          Cookies.remove("refresh_token");
-          persistor.purge();
-          window.location.href = "/login";
-          return Promise.reject(error);
-        }
-
-        const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refreshToken`,
-          { refreshToken }
-        );
-
+        const res = await refreshApi.post("/auth/refreshToken", refreshToken, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          transformRequest: [(data) => data],
+        });
         const newAccessToken = res.data.accessToken;
-        Cookies.set("access_token", newAccessToken);
 
-        // Gắn token mới vào header và gọi lại request cũ
+        Cookies.set("access_token", newAccessToken);
+        processQueue(null, newAccessToken);
+
+        // Retry lại request cũ với token mới
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (refreshError) {
-        // Refresh thất bại => logout
-        Cookies.remove("access_token");
-        Cookies.remove("refresh_token");
-        persistor.purge();
-        window.location.href = "/login";
+        processQueue(refreshError, null);
+        // clearAuth();
         return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
 
     return Promise.reject(error);
   }
 );
+
+function clearAuth() {
+  Cookies.remove("access_token");
+  Cookies.remove("refresh_token");
+  persistor.purge();
+  // window.location.href = "/login";
+}
 
 export default api;

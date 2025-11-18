@@ -25,9 +25,7 @@ export const useRegister = () => {
   });
 };
 
-export const useAuthMutation = (
-  mutationFn: (data: any) => Promise<any>
-) =>  {
+export const useAuthMutation = (mutationFn: (data: any) => Promise<any>) => {
   const dispatch = useDispatch();
   return useMutation({
     mutationFn,
@@ -44,7 +42,7 @@ export const useAuthMutation = (
       console.error("Đăng nhập thất bại", error);
     },
   });
-}
+};
 
 export const useUpdate = () => {
   const dispatch = useDispatch();
@@ -60,4 +58,3 @@ export const useUpdate = () => {
     },
   });
 };
-
